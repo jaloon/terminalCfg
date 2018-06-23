@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>日志</title>
+    <style>
+        html, body {
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+
+        .container {
+            height: 100%;
+            position: relative;
+        }
+
+        #log_opt {
+            height: 50px;
+            background: #d7dbe2;
+        }
+
+        #log_box {
+            border: #999999 1px solid;
+            overflow-x: hidden;
+            overflow-y: auto;
+            width: 100%;
+            position: absolute;
+            top: 48px;
+            left: 0;
+            bottom: 0;
+            /*background: #D9C666;*/
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div id="log_opt">
+        <input type="button" class="btn" id="log_clean" value="日志清空">
+        <input type="button" class="btn" id="log_flush" value="日志刷新">
+    </div>
+    <div id="log_box"></div>
+</div>
+</body>
+</html>
+<script>
+    function createXmlHttp() {
+        var xmlhttp;
+        if (window.XMLHttpRequest) {
+            // code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp = new XMLHttpRequest();
+        } else {
+            // code for IE6, IE5
+            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        return xmlhttp;
+    }
+
+    function ajaxGet(url, successFn) {
+        var xmlhttp = createXmlHttp();
+        xmlhttp.onreadystatechange = function () {
+            if (xmlhttp.readyState == 4) { // 4 = "loaded"
+                if (xmlhttp.status == 200) { // 200 = "OK"
+                    successFn(xmlhttp.responseText);
+                } else {
+                    alert("http connection error: status[" + xmlhttp.status + "], " + xmlhttp.statusText);
+                }
+            }
+        }
+        xmlhttp.open("GET", url, true);
+        xmlhttp.send();
+    }
+
+    function ajaxPost(url, data, successFn) {
+        var xmlhttp = createXmlHttp();
+        xmlhttp.onreadystatechange = function () {
+            if (xmlhttp.readyState == 4) { // 4 = "loaded"
+                if (xmlhttp.status == 200) { // 200 = "OK"
+                    var response = JSON.parse(xmlhttp.responseText);
+                    successFn(response);
+                } else {
+                    alert("http connection error: status[" + xmlhttp.status + "], " + xmlhttp.statusText);
+                }
+            }
+        }
+        xmlhttp.open("POST", url, true);
+        xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xmlhttp.send(data);
+    }
+
+    function $(elementId) {
+        return document.getElementById(elementId);
+    }
+
+    function bindEvent(element, event, fn) {
+        if (element.addEventListener) {
+            // 现代浏览器
+            element.addEventListener(event, fn);
+        } else if (element.attchEvent) {
+            // IE8及更早版本和Opear 7.0及更早版本
+            element.attchEvent(event, fn);
+        }
+    }
+
+
+    window.onload = function () {
+        var box = $("log_box");
+
+        function flushLog() {
+            ajaxGet("/messages", function (response) {
+                box.innerHTML = response.replace(/\n/g, "<br>");
+            });
+        }
+
+        // function setBoxSize() {
+        //     box.height = window.innerHeight - 50;
+        // }
+        //
+        // setBoxSize();
+        // window.onresize = setBoxSize;
+
+        // flushLog();
+
+        bindEvent($("log_flush"), "click", flushLog);
+
+        bindEvent($("log_clean"), "click", function () {
+            ajaxPost("/action/log_clean", "", function (response) {
+                if (response.errno < 0) {
+                    alert(response.errmsg);
+                    return;
+                }
+                box.innerHTML = "";
+            });
+        });
+    }
+</script>

@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>配送信息</title>
+    <link rel="stylesheet" href="css/base.css">
+    <style>
+        #station_box {
+            width: 520px;
+            height: 355px;
+        }
+
+        .dist_id {
+            width: 260px;
+        }
+
+        .barn_num {
+            width: 200px;
+        }
+
+        .gasstation_id {
+            width: 240px;
+        }
+
+        .gasstation_name {
+            width: 500px;
+        }
+
+        .status {
+            width: 300px;
+        }
+
+        .authtype {
+            width: 300px;
+        }
+
+        .authid {
+            width: 240px;
+        }
+
+        .datetime {
+            width: 300px;
+        }
+
+    </style>
+</head>
+
+<body>
+<div class="container">
+    <div class="top">
+        <div class="logo-zone">
+            <img src="img/commen-logo.png"/>
+            <span class="logo-text">普利通电子签封安全监管系统</span>
+        </div>
+    </div>
+    <div class="main">
+        <div class="left-nav">
+            <dl>
+                <dt class="nav-el" id="param" url="param_dev.html">
+                    参数
+                    <img src="img/nav_right_12.png"/>
+                </dt>
+            </dl>
+            <dl>
+                <dt class="nav-el" id="status" url="status_dev.html">
+                    状态
+                    <img src="img/nav_right_12.png"/>
+                </dt>
+            </dl>
+            <dl>
+                <dt class="nav-el" id="record" url="record_alarm.html">
+                    记录
+                    <img src="img/nav_right_12.png"/>
+                </dt>
+            </dl>
+            <dl>
+                <dt class="active-el" id="distinfo" url="distinfo.html">配送信息</dt>
+            </dl>
+            <dl>
+                <dt class="nav-el" id="basedata" url="param_dev.html">
+                    基础数据
+                    <img src="img/nav_right_12.png"/>
+                </dt>
+            </dl>
+            <dl>
+                <dt class="nav-el" id="log" url="log.html">日志</dt>
+            </dl>
+        </div>
+        <div class="right-box">
+            <div class="tbl-wrap">
+                <div class="tbl-box" id="tbl_box">
+                    <table>
+                        <thead class="tbl-head" id="tbl_head">
+                        <tr>
+                            <th class="dist_id">配送单号</th>
+                            <th class="barn_num">仓号</th>
+                            <th class="gasstation_id">加油站号</th>
+                            <th class="gasstation_name">加油站名称</th>
+                            <th class="status">状态</th>
+                            <th class="authtype">认证类型</th>
+                            <th class="authid">认证编号</th>
+                            <th class="datetime">时间</th>
+                        </tr>
+                        </thead>
+                        <tbody class="tbl-body" id="tbl_body"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="hidden-shade"  id="shade_box">
+    <div class="hidden-box" id="station_box">
+        <div class="hidden-title">
+            加油站信息
+            <span class="hidden-close" id="station_box_close" title="关闭">✖</span>
+        </div>
+        <div class="param-box" id="station_box_content">
+            <table>
+                <tr>
+                    <td>加油站ID</td>
+                    <td>
+                        <input type="text" class="param" id="station_id" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>加油站名称</td>
+                    <td>
+                        <input type="text" class="param" id="station_name" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>经度</td>
+                    <td>
+                        <input type="text" class="param" id="station_lng" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>纬度</td>
+                    <td>
+                        <input type="text" class="param" id="station_lat" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>半径</td>
+                    <td>
+                        <input type="text" class="param" id="station_radius" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>普通卡</td>
+                    <td>
+                        <div class="param" id="station_card"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>加油站范围</td>
+                    <td>
+                        <div class="param" id="station_cover"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>手持机</td>
+                    <td>
+                        <div class="param" id="station_handset"></div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+<script>
+    /**
+     * ajax get 请求
+     * @param {string} url 请求路径
+     * @param {function} successFn 请求成功的回调函数
+     */
+    function ajaxGet(url, successFn) {
+        var xmlhttp;
+        if (window.XMLHttpRequest) {
+            // code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp = new XMLHttpRequest();
+        } else {
+            // code for IE6, IE5
+            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xmlhttp.onreadystatechange = function () {
+            if (xmlhttp.readyState == 4) { // 4 = "loaded"
+                if (xmlhttp.status == 200) { // 200 = "OK"
+                    var response = JSON.parse(xmlhttp.responseText);
+                    successFn(response);
+                } else {
+                    alert("http connection error: status[" + xmlhttp.status + "], " + xmlhttp.statusText);
+                }
+            }
+        }
+        xmlhttp.open("GET", url, true);
+        xmlhttp.send();
+    }
+
+    /**
+     * 根据元素ID获取页面元素
+     * @param {string} elementId 元素ID
+     * @returns {HTMLElement | null} 页面元素
+     */
+    function $(elementId) {
+        return document.getElementById(elementId);
+    }
+
+    /**
+     * 为页面元素绑定事件
+     * @param {HTMLElement} element 页面元素
+     * @param {string} event 事件名称
+     * @param {function} fn 事件处理函数
+     */
+    function bindEvent(element, event, fn) {
+        if (element.addEventListener) {
+            // 现代浏览器
+            element.addEventListener(event, fn);
+        } else if (element.attchEvent) {
+            // IE8及更早版本和Opear 7.0及更早版本
+            element.attchEvent(event, fn);
+        }
+    }
+
+    /**
+     * 时间秒数格式化为日期时间字符串形式
+     * @param {number} second 时间秒数
+     * @returns {string} 日期时间字符串
+     */
+    function formatDateTime(second) {
+        var date = new Date(second * 1000);
+        var y = date.getFullYear();
+        var m = date.getMonth() + 1;
+        m = m < 10 ? ('0' + m) : m;
+        var d = date.getDate();
+        d = d < 10 ? ('0' + d) : d;
+        var h = date.getHours();
+        h = h < 10 ? ('0' + h) : h;
+        var minute = date.getMinutes();
+        minute = minute < 10 ? ('0' + minute) : minute;
+        var second = date.getSeconds();
+        second = second < 10 ? ('0' + second) : second;
+        return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second;
+    }
+
+    /**
+     * 配送状态
+     * @param {number} status 配送状态值
+     * @returns {string} 配送状态
+     */
+    function parseStatus(status) {
+        if (status == 0) {
+            return "未配送";
+        } else if (status == 1) {
+            return "已配送";
+        } else {
+            return "未知";
+        }
+    }
+
+    /**
+     * 认证类型
+     * @param {number} authtype 认证类型值
+     * @returns {string} 认证类型
+     */
+    function parseAuthType(authtype) {
+        switch (authtype) {
+            case 0:
+                return "其他方式";
+            case 1:
+                return "出入库读卡器";
+            case 2:
+                return "出入库卡";
+            case 3:
+                return "手持机";
+            case 4:
+                return "普通卡";
+            case 5:
+                return "应急卡";
+            case 6:
+                return "远程操作";
+            case 6:
+                return "操作员";
+            default:
+                return "未知";
+        }
+    }
+
+    var gasstations;
+    var commoncards;
+    var gpss;
+    var handles;
+
+    /**
+     * 根据加油站ID获取加油站名称
+     * @param {number} stationid 加油站ID
+     * @returns {string} 加油站名称
+     */
+    function getStationNameById(stationid) {
+        if (gasstations == undefined || gasstations == null || gasstations.length == 0) {
+            return "未知";
+        }
+        for (var i = 0; i < gasstations.length; i++) {
+            var station = gasstations[i];
+            if (station.id == stationid) {
+                return station.name;
+            }
+        }
+        return "未知";
+    }
+
+    function viewStation(stationid) {
+        $("station_id").value = stationid;
+        setStationBaseData(stationid);
+        setStationCard(stationid);
+        setStationCover(stationid);
+        setStationHandset(stationid);
+        $("shade_box").style.display = "block";
+    }
+
+    function setStationBaseData(stationid) {
+        if (gasstations == undefined || gasstations == null || gasstations.length == 0) {
+            $("station_name").value = "未知";
+            $("station_lng").value = "未知";
+            $("station_lat").value = "未知";
+            $("station_radius").value = "未知";
+            return;
+        }
+        for (var i = 0; i < gasstations.length; i++) {
+            var station = gasstations[i];
+            if (station.id == stationid) {
+                $("station_name").value = station.name;
+                $("station_lng").value = station.lon;
+                $("station_lat").value = station.lat;
+                $("station_radius").value = station.radius;
+                return;
+            }
+        }
+
+        $("station_name").value = "未知";
+        $("station_lng").value = "未知";
+        $("station_lat").value = "未知";
+        $("station_radius").value = "未知";
+    }
+
+    function setStationCard(stationid) {
+        if (commoncards == undefined || commoncards == null || commoncards.length == 0) {
+            $("station_cover").innerHTML = "无";
+            return;
+        }
+        var cardHtml = "";
+        for (var i = 0; i < commoncards.length; i++) {
+            var card = commoncards[i];
+            if (card.gasstation_id == stationid) {
+                cardHtml += ",<br>" + card.commoncard_id;
+            }
+        }
+        if (cardHtml.length > 0) {
+            $("station_card").innerHTML = cardHtml.slice(5);
+        } else {
+            $("station_card").innerHTML = "无";
+        }
+    }
+
+    function setStationCover(stationid) {
+        if (gpss == undefined || gpss == null || gpss.length == 0) {
+            $("station_cover").innerHTML = "";
+            return;
+        }
+        var coverHtml = "";
+        for (var i = 0; i < gpss.length; i++) {
+            var gps = gpss[i];
+            if (gps.gasstation_id == stationid) {
+                coverHtml += "、<br>(" + gps.lon + ", " + gps.lat + ")";
+            }
+        }
+        if (coverHtml.length > 0) {
+            $("station_cover").innerHTML = coverHtml.slice(5);
+        } else {
+            $("station_cover").innerHTML = "";
+        }
+    }
+
+    function setStationHandset(stationid) {
+        if (handles == undefined || handles == null || handles.length == 0) {
+            $("station_handset").innerHTML = "";
+            return;
+        }
+        var handsetHtml = "";
+        for (var i = 0; i < handles.length; i++) {
+            var handset = handles[i];
+            if (handset.gasstation_id == stationid) {
+                handsetHtml += ",<br>" + handset.handle_id;
+            }
+        }
+        if (handsetHtml.length > 0) {
+            $("station_handset").innerHTML = handsetHtml.slice(5);
+        } else {
+            $("station_handset").innerHTML = "";
+        }
+    }
+
+    window.onload = function () {
+        var navEls = document.getElementsByClassName("nav-el");
+        for (var i = 0; i < navEls.length; i++) {
+            bindEvent(navEls[i], "click", function (event) {
+                window.location.href = event.target.getAttribute("url");
+            });
+        }
+
+        bindEvent(document.getElementsByClassName("active-el")[0], "click", function (event) {
+            window.location.href = event.target.getAttribute("url");
+        });
+
+
+        bindEvent($("tbl_box"), "scroll", function (event) {
+            $("tbl_head").style.transform = "translateY(" + event.target.scrollTop + "px)";
+        });
+
+        bindEvent($("station_box_close"), "click", function () {
+            $("shade_box").style.display = "none";
+        });
+
+        ajaxGet("/action/distinfo_get", function (response) {
+            if (response.errno < 0) {
+                alert(response.errmsg);
+                return;
+            }
+            var distinfos = response.distinfos;
+            var len = distinfos.length;
+            if (len < 1) {
+                alert("无配送信息！")
+                return;
+            }
+
+            gasstations = response.gasstations;
+            commoncards = response.commoncards;
+            gpss = response.gpss;
+            handles = response.handles;
+
+            var tbody_html = "";
+            for (var i = 0; i < len; i++) {
+                var distinfo = distinfos[i];
+                tbody_html += "<tr onclick='viewStation(" + distinfo.gasstation_id + ")'>" +
+                    "<td class='dist_id'>" + distinfo.dist_id + "</td>" +
+                    "<td class='barn_num'>" + distinfo.barn_num + "</td>" +
+                    "<td class='gasstation_id'>" + distinfo.gasstation_id + "</td>" +
+                    "<td class='gasstation_name'>" + getStationNameById(distinfo.gasstation_id) + "</td>" +
+                    "<td class='status'>" + parseStatus(distinfo.status) + "</td>" +
+                    "<td class='authtype'>" + parseAuthType(distinfo.authtype) + "</td>" +
+                    "<td class='authid'>" + distinfo.authid + "</td>" +
+                    "<td class='datetime'>" + formatDateTime(distinfo.datetime) + "</td></tr>";
+            }
+            $("tbl_body").innerHTML = tbody_html;
+        });
+    }
+</script>

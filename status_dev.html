@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>设备状态</title>
+    <link rel="stylesheet" href="css/base.css">
+</head>
+<body>
+<div class="container">
+    <table>
+        <tr>
+            <td>状态</td>
+            <td>
+                <input type="text" class="param" id="status" readonly>
+            </td>
+        </tr>
+        <tr>
+            <td>前状态</td>
+            <td>
+                <input type="text" class="param" id="statusbf" readonly>
+            </td>
+        </tr>
+        <tr>
+            <td>配送单状态</td>
+            <td>
+                <input type="text" class="param" id="diststatus" readonly>
+            </td>
+        </tr>
+        <tr>
+            <td>越界报警</td>
+            <td>
+                <input type="text" class="param" id="dev_alarm_outrange" readonly>
+            </td>
+        </tr>
+        <tr>
+            <td>站点编号</td>
+            <td>
+                <input type="text" class="param" id="station_id" readonly>
+            </td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>
+<script>
+    function ajaxGet(url, successFn) {
+        var xmlhttp;
+        if (window.XMLHttpRequest) {
+            // code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp = new XMLHttpRequest();
+        } else {
+            // code for IE6, IE5
+            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xmlhttp.onreadystatechange = function () {
+            if (xmlhttp.readyState == 4) { // 4 = "loaded"
+                if (xmlhttp.status == 200) { // 200 = "OK"
+                    var response = JSON.parse(xmlhttp.responseText);
+                    successFn(response);
+                } else {
+                    alert("http connection error: status[" + xmlhttp.status + "], " + xmlhttp.statusText);
+                }
+            }
+        }
+        xmlhttp.open("GET", url, true);
+        xmlhttp.send();
+    }
+
+    function $(elementId) {
+        return document.getElementById(elementId);
+    }
+
+    function parseDevStatus(status) {
+        switch (status) {
+            case 1:
+                return "在油库";
+            case 2:
+                return "在途";
+            case 3:
+                return "在加油站";
+            case 4:
+                return "返程";
+            case 5:
+                return "应急状态";
+            default:
+                return "未知状态";
+        }
+    }
+
+    window.onload = function () {
+        ajaxGet("/action/status_dev_get", function (response) {
+            if (response.errno < 0) {
+                alert(response.errmsg);
+                return;
+            }
+            var data = response.datas[0];
+            $("status").value = parseDevStatus(data.status);
+            $("statusbf").value = parseDevStatus(data.statusbf);
+            $("diststatus").value = data.diststatus == 0 ? "未同步" : data.diststatus == 0 ? "已同步" : "未知";
+            $("dev_alarm_outrange").value = data.dev_alarm_outrange == 0 ? "否" : data.dev_alarm_outrange == 1 ? "是" : "未知";
+            $("station_id").value = data.station_id;
+        });
+    }
+</script>

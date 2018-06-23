@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>GPS状态</title>
+    <link rel="stylesheet" href="css/base.css">
+</head>
+<body>
+<div class="container">
+    <table>
+        <tr>
+            <td>开始时间</td>
+            <td>
+                <input type="text" class="param" id="real_start_time" readonly>
+            </td>
+        </tr>
+        <tr>
+            <td>结束时间</td>
+            <td>
+                <input type="text" class="param" id="real_end_time" readonly>
+            </td>
+        </tr>
+        <tr>
+            <td>上报间隔</td>
+            <td>
+                <input type="text" class="param" id="real_rpt_intvl" readonly>
+            </td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>
+<script>
+    function ajaxGet(url, successFn) {
+        var xmlhttp;
+        if (window.XMLHttpRequest) {
+            // code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp = new XMLHttpRequest();
+        } else {
+            // code for IE6, IE5
+            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xmlhttp.onreadystatechange = function () {
+            if (xmlhttp.readyState == 4) { // 4 = "loaded"
+                if (xmlhttp.status == 200) { // 200 = "OK"
+                    var response = JSON.parse(xmlhttp.responseText);
+                    successFn(response);
+                } else {
+                    alert("http connection error: status[" + xmlhttp.status + "], " + xmlhttp.statusText);
+                }
+            }
+        }
+        xmlhttp.open("GET", url, true);
+        xmlhttp.send();
+    }
+
+    function $(elementId) {
+        return document.getElementById(elementId);
+    }
+
+    function formatDateTime(second) {
+        var date = new Date(second * 1000);
+        var y = date.getFullYear();
+        var m = date.getMonth() + 1;
+        m = m < 10 ? ('0' + m) : m;
+        var d = date.getDate();
+        d = d < 10 ? ('0' + d) : d;
+        var h = date.getHours();
+        h = h < 10 ? ('0' + h) : h;
+        var minute = date.getMinutes();
+        minute = minute < 10 ? ('0' + minute) : minute;
+        var second = date.getSeconds();
+        second = second < 10 ? ('0' + second) : second;
+        return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second;
+    }
+
+    window.onload = function () {
+        ajaxGet("/action/status_gps_get", function (response) {
+            if (response.errno < 0) {
+                alert(response.errmsg);
+                return;
+            }
+            var data = response.datas[0];
+            $("real_start_time").value = formatDateTime(data.real_start_time);
+            $("real_end_time").value = formatDateTime(data.real_end_time);
+            $("real_rpt_intvl").value = data.real_rpt_intvl;
+        });
+    }
+</script>

@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>开锁重置记录</title>
+    <style>
+        #tbl_box {
+            /**make table can scroll**/
+            max-height: 200px;
+            overflow: auto;
+            /** add some style**/
+            /*padding: 2px;*/
+            background: #ddd;
+            margin: 20px 10px;
+            box-shadow: 0 0 1px 3px #ddd;
+        }
+    </style>
+</head>
+<body>
+<div class='table-cont' id='tbl_box'>
+    <table>
+        <thead id="tbl_head">
+        <tr>
+            <th class="id">编号</th>
+            <th class="lockid">锁ID</th>
+            <th class="authtype">认证类型</th>
+            <th class="authid">认证编号</th>
+            <th class="stationtype">站点类型</th>
+            <th class="stationid">站点编号</th>
+            <th class="datetime">时间</th>
+            <th class="gps_valid">GPS是否有效</th>
+            <th class="gps_lon">经度</th>
+            <th class="gps_lat">纬度</th>
+            <th class="gps_speed">速度</th>
+            <th class="gps_angle">角度</th>
+            <th class="devstatus">设备状态</th>
+            <th class="devalarm">设备报警</th>
+            <th class="uploadstatus">上传状态</th>
+            <th class="uploadtype">上传通道</th>
+            <th class="locknum">锁数量</th>
+            <th class="lockinfo">锁信息</th>
+        </tr>
+        </thead>
+        <tbody id="tbl_body"></tbody>
+    </table>
+</div>
+</body>
+</html>
+<script>
+    /**
+     * ajax get 请求
+     * @param {string} url 请求路径
+     * @param {function} successFn 请求成功的回调函数
+     */
+    function ajaxGet(url, successFn) {
+        var xmlhttp;
+        if (window.XMLHttpRequest) {
+            // code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp = new XMLHttpRequest();
+        } else {
+            // code for IE6, IE5
+            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xmlhttp.onreadystatechange = function () {
+            if (xmlhttp.readyState == 4) { // 4 = "loaded"
+                if (xmlhttp.status == 200) { // 200 = "OK"
+                    var response = JSON.parse(xmlhttp.responseText);
+                    successFn(response);
+                } else {
+                    alert("http connection error: status[" + xmlhttp.status + "], " + xmlhttp.statusText);
+                }
+            }
+        }
+        xmlhttp.open("GET", url, true);
+        xmlhttp.send();
+    }
+
+    /**
+     * 根据元素ID获取页面元素
+     * @param {string} elementId 元素ID
+     * @returns {HTMLElement | null} 页面元素
+     */
+    function $(elementId) {
+        return document.getElementById(elementId);
+    }
+
+    /**
+     * 为页面元素绑定事件
+     * @param {HTMLElement} element 页面元素
+     * @param {string} event 事件名称
+     * @param {function} fn 事件处理函数
+     */
+    function bindEvent(element, event, fn) {
+        if (element.addEventListener) {
+            // 现代浏览器
+            element.addEventListener(event, fn);
+        } else if (element.attchEvent) {
+            // IE8及更早版本和Opear 7.0及更早版本
+            element.attchEvent(event, fn);
+        }
+    }
+
+    /**
+     * 时间秒数格式化为日期时间字符串形式
+     * @param {number} second 时间秒数
+     * @returns {string} 日期时间字符串
+     */
+    function formatDateTime(second) {
+        var date = new Date(second * 1000);
+        var y = date.getFullYear();
+        var m = date.getMonth() + 1;
+        m = m < 10 ? ('0' + m) : m;
+        var d = date.getDate();
+        d = d < 10 ? ('0' + d) : d;
+        var h = date.getHours();
+        h = h < 10 ? ('0' + h) : h;
+        var minute = date.getMinutes();
+        minute = minute < 10 ? ('0' + minute) : minute;
+        var second = date.getSeconds();
+        second = second < 10 ? ('0' + second) : second;
+        return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second;
+    }
+
+    /**
+     * 站点类型
+     * @param {number} stationtype 站点类型值
+     * @returns {string} 站点类型
+     */
+    function parsseStationType(stationtype) {
+        if (stationtype == 1) {
+            return "油库";
+        } else if (stationtype == 2) {
+            return "加油站";
+        } else {
+            return "未知";
+        }
+    }
+
+    /**
+     * 认证类型
+     * @param {number} authtype 认证类型值
+     * @returns {string} 认证类型
+     */
+    function parseAuthType(authtype) {
+        switch (authtype) {
+            case 0:
+                return "其他方式";
+            case 1:
+                return "出入库读卡器";
+            case 2:
+                return "出入库卡";
+            case 3:
+                return "手持机";
+            case 4:
+                return "普通卡";
+            case 5:
+                return "应急卡";
+            case 6:
+                return "远程操作";
+            case 6:
+                return "操作员";
+            default:
+                return "未知";
+        }
+    }
+
+    /**
+     * GPS是否有效
+     * @param {number} gps_valid GPS有效状态值
+     * @returns {string} GPS是否有效（无效/有效）
+     */
+    function validGps(gps_valid) {
+        if (gps_valid == 0) {
+            return "无效";
+        } else if (gps_valid == 1) {
+            return "有效";
+        } else {
+            return "未知";
+        }
+    }
+
+    /**
+     * 车辆状态
+     * @param {number} devstatus 车辆状态值
+     * @returns {string} 车辆状态
+     */
+    function parseDevStatus(devstatus) {
+        switch (devstatus) {
+            case 1:
+                return "在油库";
+            case 2:
+                return "在途";
+            case 3:
+                return "在加油站";
+            case 4:
+                return "返程";
+            case 5:
+                return "应急";
+            case 6:
+                return "待入库";
+            default:
+                return "未知";
+        }
+    }
+
+    /**
+     * 上传状态
+     * @param {number} uploadstatus 上传状态值
+     * @returns {string} 上传状态
+     */
+    function parseUploadStatus(uploadstatus) {
+        switch (uploadstatus) {
+            case 0:
+                return "未上传";
+            case 1:
+                return "上传中";
+            case 2:
+                return "已上传";
+            default:
+                return "未知";
+        }
+    }
+
+    /**
+     * 上传通道
+     * @param {number} uploadtype 上传通道值
+     * @returns {string} 上传通道
+     */
+    function parseUploadChannel(uploadtype) {
+        switch (uploadtype) {
+            case 0:
+                return "无";
+            case 1:
+                return "无线网络";
+            case 2:
+                return "自组网";
+            default:
+                return "未知";
+        }
+    }
+
+    /**
+     * 获取开锁重置记录
+     * @param {number} startpage 分页起始数量
+     * @param {number} pagettl 记录总数
+     */
+    function getLockResetRecord(startpage, pagettl) {
+        var url = "/action/record_lockopenreset_get";
+        var param = "";
+        if (startpage != undefined && startpage != null) {
+            param += "&startpage=" + startpage;
+        }
+        if (pagettl != undefined && pagettl != null) {
+            param += "&pagettl=" + pagettl;
+        }
+        if (param.length > 0) {
+            param = param.slice(1);
+            url += "?" + param;
+        }
+        ajaxGet(url, function (response) {
+            if (response.errno < 0) {
+                alert(response.errmsg);
+                return;
+            }
+            var datas = response.datas;
+            var len = datas.length;
+            if (len < 1) {
+                alert("无开锁重置记录信息！")
+            }
+
+            var tbody_html = "";
+            for (var i = 0; i < len; i++) {
+                var data = datas[i];
+                tbody_html += "<tr><td class='id'>" + data.id + "</td>" +
+                    "<td class='lockid'>" + data.lockid + "</td>" +
+                    "<td class='authtype'>" + parseAuthType(data.authtype) + "</td>" +
+                    "<td class='authid'>" + data.authid + "</td>" +
+                    "<td class='stationtype'>" + parsseStationType(data.stationtype) + "</td>" +
+                    "<td class='stationid'>" + data.stationid + "</td>" +
+                    "<td class='datetime'>" + formatDateTime(data.datetime) + "</td>" +
+                    "<td class='gps_valid'>" + validGps(data.gps_valid) + "</td>" +
+                    "<td class='gps_lon'>" + data.gps_lon + "</td>" +
+                    "<td class='gps_lat'>" + data.gps_lat + "</td>" +
+                    "<td class='gps_speed'>" + data.gps_speed + "</td>" +
+                    "<td class='gps_angle'>" + data.gps_angle + "</td>" +
+                    "<td class='devstatus'>" + parseDevStatus(data.devstatus) + "</td>" +
+                    "<td class='devalarm'>" + data.devalarm + "</td>" +
+                    "<td class='uploadstatus'>" + parseUploadStatus(data.uploadstatus) + "</td>" +
+                    "<td class='uploadtype'>" + parseUploadChannel(data.uploadtype) + "</td>" +
+                    "<td class='locknum'>" + data.locknum + "</td>" +
+                    "<td class='lockinfo'>" + data.lockinfo + "</td></tr>";
+            }
+            $("tbl_body").innerHTML = tbody_html;
+        });
+    }
+
+    window.onload = function () {
+        bindEvent($("tbl_box"), "scroll", function (event) {
+            $("tbl_head").style.transform = "translateY(" + event.target.scrollTop + "px)";
+        });
+
+        getLockResetRecord(0, 20);
+    }
+</script>
