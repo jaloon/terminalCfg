@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>出入库卡</title>
+    <link rel="stylesheet" href="../css/base.css">
+    <style>
+        .id {
+            width: 400px;
+        }
+
+        .card_id {
+            width: 400px;
+        }
+
+        .type {
+            width: 500px;
+        }
+
+        .station_id {
+            width: 400px;
+        }
+
+        .owner_id {
+            width: 400px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="tbl-wrap">
+        <div class="tbl-box" id="tbl_box">
+            <table>
+                <thead class="tbl-head" id="tbl_head">
+                <tr>
+                    <th class="id">序号</th>
+                    <th class="card_id">卡号</th>
+                    <th class="type">卡类型</th>
+                    <th class="station_id">油库编号</th>
+                    <th class="owner_id">持有人ID</th>
+                </tr>
+                </thead>
+                <tbody class="tbl-body" id="tbl_body"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+<script>
+    /**
+     * 根据元素ID获取页面元素
+     * @param {string} elementId 元素ID
+     * @returns {HTMLElement | null} 页面元素
+     */
+    function $(elementId) {
+        return document.getElementById(elementId);
+    }
+
+    /**
+     * 为页面元素绑定事件
+     * @param {HTMLElement} element 页面元素
+     * @param {string} event 事件名称
+     * @param {function} fn 事件处理函数
+     */
+    function bindEvent(element, event, fn) {
+        if (element.addEventListener) {
+            // 现代浏览器
+            element.addEventListener(event, fn);
+        } else if (element.attchEvent) {
+            // IE8及更早版本和Opear 7.0及更早版本
+            element.attchEvent(event, fn);
+        }
+    }
+
+    /**
+     * ajax get 请求
+     * @param {string} url 请求路径
+     * @param {function} successFn 请求成功的回调函数
+     */
+    function ajaxGet(url, successFn) {
+        var xmlhttp;
+        if (window.XMLHttpRequest) {
+            // code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp = new XMLHttpRequest();
+        } else {
+            // code for IE6, IE5
+            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xmlhttp.onreadystatechange = function () {
+            if (xmlhttp.readyState == 4) { // 4 = "loaded"
+                if (xmlhttp.status == 200) { // 200 = "OK"
+                    var response = JSON.parse(xmlhttp.responseText);
+                    successFn(response);
+                } else {
+                    alert("http connection error: status[" + xmlhttp.status + "], " + xmlhttp.statusText);
+                }
+            }
+        }
+        xmlhttp.open("GET", url, true);
+        xmlhttp.send();
+    }
+
+    /**
+     * 卡类型
+     * @param {number} type 卡类型值
+     * @returns {string} 卡类型
+     */
+    function parseType(type) {
+        switch (type) {
+            case 2:
+                return "入库卡";
+            case 3:
+                return "出库卡";
+            case 4:
+                return "出入库卡";
+            default:
+                return "未知";
+        }
+    }
+
+    window.onload = function () {
+        bindEvent($("tbl_box"), "scroll", function (event) {
+            $("tbl_head").style.transform = "translateY(" + event.target.scrollTop + "px)";
+        });
+
+        ajaxGet("/action/basedata_ioocard_get", function (response) {
+            if (response.errno < 0) {
+                alert(response.errmsg);
+                return;
+            }
+            var datas = response.datas;
+            var len = datas.length;
+            if (len < 1) {
+                alert("无出入库卡信息！")
+            }
+
+            var tbody_html = "";
+            for (var i = 0; i < len; i++) {
+                var data = datas[i];
+                tbody_html += "<tr><td class='id'>" + data.id + "</td>" +
+                    "<td class='card_id'>" + data.card_id + "</td>" +
+                    "<td class='type'>" + parseType(data.type) + "</td>" +
+                    "<td class='station_id'>" + data.station_id + "</td>" +
+                    "<td class='owner_id'>" + data.owner_id + "</td></tr>";
+            }
+            $("tbl_body").innerHTML = tbody_html;
+        })
+
+    }
+</script>

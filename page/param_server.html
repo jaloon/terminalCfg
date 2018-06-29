@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>服务器参数</title>
+    <link rel="stylesheet" href="../css/base.css">
+    <style>
+        #tbl_box tr td:first-child {
+            width: 160px;
+        }
+
+        #submit {
+            width: 100px;
+            height: 36px;
+            color: #ffffff;
+            border: 0;
+            position: relative;
+            left: 480px;
+            top: 30px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="tbl-wrap">
+        <div class="item-box" id="tbl_box">
+            <table>
+                <tr>
+                    <td>业务服务器IP</td>
+                    <td>
+                        <input type="text" class="item" id="business_svr_ip" placeholder="最大长度255" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>业务服务器端口</td>
+                    <td>
+                        <input type="number" min="0" max="65535" step="1" class="item" id="business_svr_port"
+                               placeholder="数值范围 0 ~ 65535" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>业务服务器RC4KEY</td>
+                    <td>
+                        <input type="text" class="item" id="business_svr_rc4key" placeholder="最大长度128" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>业务服务器RC4Key版本</td>
+                    <td>
+                        <input type="number" min="0" max="255" step="1" class="item" id="business_svr_rc4key_ver"
+                               placeholder="数值范围 0 ~ 255" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>通用服务器地址</td>
+                    <td>
+                        <input type="text" class="item" id="common_svr_addr" placeholder="最大长度511">
+                    </td>
+                </tr>
+                <tr>
+                    <td>通用服务器RC4Key版本</td>
+                    <td>
+                        <input type="number" min="0" max="255" step="1" class="item" id="common_svr_rc4key_ver"
+                               placeholder="数值范围 0 ~ 255">
+                    </td>
+                </tr>
+                <tr>
+                    <td>通用服务器RC4KEY</td>
+                    <td>
+                        <input type="text" class="item" id="common_svr_rc4key" placeholder="最大长度128">
+                    </td>
+                </tr>
+                <tr>
+                    <td>重连次数</td>
+                    <td>
+                        <input type="number" min="0" max="60" step="1" class="item" id="reretry_time"
+                               placeholder="数值范围 0 ~ 60">
+                    </td>
+                </tr>
+                <tr>
+                    <td>重连间隔</td>
+                    <td>
+                        <input type="number" min="10" max="65535" step="1" class="item" id="reretry_intvl"
+                               placeholder="数值范围 10 ~ 65535">
+                    </td>
+                </tr>
+                <tr>
+                    <td>GPS采集频率</td>
+                    <td>
+                        <input type="number" min="1" max="255" step="1" class="item" id="gps_coll_rate"
+                               placeholder="数值范围 1 ~ 255" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>GPS上报频率</td>
+                    <td>
+                        <input type="number" min="1" max="255" step="1" class="item" id="gps_rpt_rate"
+                               placeholder="数值范围 1 ~ 255" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>GPS采集距离</td>
+                    <td>
+                        <input type="number" min="1" max="255" step="1" class="item" id="gps_coll_dist"
+                               placeholder="数值范围 1 ~ 255" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>重发次数</td>
+                    <td>
+                        <input type="number" min="0" max="10" step="1" class="item" id="resend_time"
+                               placeholder="数值范围 0 ~ 10">
+                    </td>
+                </tr>
+                <tr>
+                    <td>重发间隔</td>
+                    <td>
+                        <input type="number" min="1" max="120" step="1" class="item" id="resend_intvl"
+                               placeholder="数值范围 1 ~ 120">
+                    </td>
+                </tr>
+                <tr>
+                    <td>心跳间隔</td>
+                    <td>
+                        <input type="number" min="30" max="240" step="1" class="item" id="heartbeat_intvl"
+                               placeholder="数值范围 30 ~ 240">
+                    </td>
+                </tr>
+                <tr>
+                    <td>业务ID</td>
+                    <td>
+                        <input type="text" class="item" id="business_id" placeholder="0x01000000 ~ 0x01FFFFFF">
+                    </td>
+                </tr>
+                <tr>
+                    <td>基础数据服务器地址</td>
+                    <td>
+                        <input type="text" class="item" id="basedata_path" placeholder="最大长度511" readonly>
+                    </td>
+                </tr>
+            </table>
+
+            <input type="button" class="btn" id="submit" value="提交">
+        </div>
+    </div>
+</div>
+</body>
+</html>
+<script>
+    function createXmlHttp() {
+        var xmlhttp;
+        if (window.XMLHttpRequest) {
+            // code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp = new XMLHttpRequest();
+        } else {
+            // code for IE6, IE5
+            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        return xmlhttp;
+    }
+
+    function ajaxGet(url, successFn) {
+        var xmlhttp = createXmlHttp();
+        xmlhttp.onreadystatechange = function () {
+            if (xmlhttp.readyState == 4) { // 4 = "loaded"
+                if (xmlhttp.status == 200) { // 200 = "OK"
+                    var response = JSON.parse(xmlhttp.responseText);
+                    successFn(response);
+                } else {
+                    alert("http connection error: status[" + xmlhttp.status + "], " + xmlhttp.statusText);
+                }
+            }
+        }
+        xmlhttp.open("GET", url, true);
+        xmlhttp.send();
+    }
+
+    function ajaxPost(url, data, successFn) {
+        var xmlhttp = createXmlHttp();
+        xmlhttp.onreadystatechange = function () {
+            if (xmlhttp.readyState == 4) { // 4 = "loaded"
+                if (xmlhttp.status == 200) { // 200 = "OK"
+                    var response = JSON.parse(xmlhttp.responseText);
+                    successFn(response);
+                } else {
+                    alert("http connection error: status[" + xmlhttp.status + "], " + xmlhttp.statusText);
+                }
+            }
+        }
+        xmlhttp.open("POST", url, true);
+        xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xmlhttp.send(data);
+    }
+
+    function $(elementId) {
+        return document.getElementById(elementId);
+    }
+
+    function bindEvent(element, event, fn) {
+        if (element.addEventListener) {
+            // 现代浏览器
+            element.addEventListener(event, fn);
+        } else if (element.attchEvent) {
+            // IE8及更早版本和Opear 7.0及更早版本
+            element.attchEvent(event, fn);
+        }
+    }
+
+    window.onload = function () {
+        var $business_svr_ip = $("business_svr_ip");
+        var $business_svr_port = $("business_svr_port");
+        var $business_svr_rc4key = $("business_svr_rc4key");
+        var $business_svr_rc4key_ver = $("business_svr_rc4key_ver");
+        var $common_svr_addr = $("common_svr_addr");
+        var $common_svr_rc4key_ver = $("common_svr_rc4key_ver");
+        var $common_svr_rc4key = $("common_svr_rc4key");
+        var $reretry_time = $("reretry_time");
+        var $reretry_intvl = $("reretry_intvl");
+        var $gps_coll_rate = $("gps_coll_rate");
+        var $gps_rpt_rate = $("gps_rpt_rate");
+        var $gps_coll_dist = $("gps_coll_dist");
+        var $resend_time = $("resend_time");
+        var $resend_intvl = $("resend_intvl");
+        var $heartbeat_intvl = $("heartbeat_intvl");
+        var $business_id = $("business_id");
+        var $basedata_path = $("basedata_path");
+        ajaxGet("/action/param_server_get", function (response) {
+            if (response.errno < 0) {
+                alert(response.errmsg);
+                return;
+            }
+            var data = response.datas[0];
+            $business_svr_ip.value = data.business_svr_ip;
+            $business_svr_port.value = data.business_svr_port;
+            $business_svr_rc4key.value = data.business_svr_rc4key;
+            $business_svr_rc4key_ver.value = data.business_svr_rc4key_ver;
+            $common_svr_addr.value = data.common_svr_addr;
+            $common_svr_rc4key_ver.value = data.common_svr_rc4key_ver;
+            $common_svr_rc4key.value = data.common_svr_rc4key;
+            $reretry_time.value = data.reretry_time;
+            $reretry_intvl.value = data.reretry_intvl;
+            $gps_coll_rate.value = data.gps_coll_rate;
+            $gps_rpt_rate.value = data.gps_rpt_rate;
+            $gps_coll_dist.value = data.gps_coll_dist;
+            $resend_time.value = data.resend_time;
+            $resend_intvl.value = data.resend_intvl;
+            $heartbeat_intvl.value = data.heartbeat_intvl;
+            $business_id.value = data.business_id;
+            $basedata_path.value = data.basedata_path;
+        });
+
+        bindEvent($("submit"), "click", function () {
+            var common_svr_addr = $common_svr_addr.value;
+            var common_svr_rc4key_ver = $common_svr_rc4key_ver.value;
+            var common_svr_rc4key = $common_svr_rc4key.value;
+            var reretry_time = $reretry_time.value;
+            var reretry_intvl = $reretry_intvl.value;
+            var resend_time = $resend_time.value;
+            var resend_intvl = $resend_intvl.value;
+            var heartbeat_intvl = $heartbeat_intvl.value;
+            var business_id = $business_id.value;
+            var data = "common_svr_addr=" + common_svr_addr + "&common_svr_rc4key_ver=" + common_svr_rc4key_ver +
+                "&common_svr_rc4key=" + common_svr_rc4key + "&reretry_time=" + reretry_time + "&reretry_intvl=" +
+                reretry_intvl + "&resend_time=" + resend_time + "&resend_intvl=" + resend_intvl + "&heartbeat_intvl=" +
+                heartbeat_intvl + "&business_id=" + business_id;
+            ajaxPost("/action/param_server_set", data, function (response) {
+                    if (response.errno < 0) {
+                        alert(response.errmsg);
+                        return;
+                    }
+                    alert("参数修改成功！");
+                }
+            );
+        });
+    }
+</script>

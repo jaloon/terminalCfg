@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>锁状态</title>
+    <link rel="stylesheet" href="../css/base.css">
+    <style>
+        .lockid {
+            width: 260px;
+        }
+
+        .status {
+            width: 200px;
+        }
+
+        .alarm {
+            width: 240px;
+        }
+
+        .lowpower {
+            width: 500px;
+        }
+
+        .status {
+            width: 300px;
+        }
+
+        .emalarm {
+            width: 300px;
+        }
+
+        .opened {
+            width: 240px;
+        }
+
+        .commalarm {
+            width: 300px;
+        }
+
+        .lastrecvdatetime {
+            width: 300px;
+        }
+
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="tbl-wrap">
+        <div class="tbl-box" id="tbl_box">
+            <table>
+                <thead class="tbl-head" id="tbl_head">
+                <tr>
+                    <th class="lockid">锁编号</th>
+                    <th class="status">状态</th>
+                    <th class="alarm">异常报警</th>
+                    <th class="lowpower">低电报警</th>
+                    <th class="emalarm">应急报警</th>
+                    <th class="opened">通信报警</th>
+                    <th class="commalarm">打开状态</th>
+                    <th class="lastrecvdatetime">最后通信时间</th>
+                </tr>
+                </thead>
+                <tbody class="tbl-body" id="tbl_body"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+<script>
+    /**
+     * 根据元素ID获取页面元素
+     * @param {string} elementId 元素ID
+     * @returns {HTMLElement | null} 页面元素
+     */
+    function $(elementId) {
+        return document.getElementById(elementId);
+    }
+
+    /**
+     * 为页面元素绑定事件
+     * @param {HTMLElement} element 页面元素
+     * @param {string} event 事件名称
+     * @param {function} fn 事件处理函数
+     */
+    function bindEvent(element, event, fn) {
+        if (element.addEventListener) {
+            // 现代浏览器
+            element.addEventListener(event, fn);
+        } else if (element.attchEvent) {
+            // IE8及更早版本和Opear 7.0及更早版本
+            element.attchEvent(event, fn);
+        }
+    }
+
+    /**
+     * ajax get 请求
+     * @param {string} url 请求路径
+     * @param {function} successFn 请求成功的回调函数
+     */
+    function ajaxGet(url, successFn) {
+        var xmlhttp;
+        if (window.XMLHttpRequest) {
+            // code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp = new XMLHttpRequest();
+        } else {
+            // code for IE6, IE5
+            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xmlhttp.onreadystatechange = function () {
+            if (xmlhttp.readyState == 4) { // 4 = "loaded"
+                if (xmlhttp.status == 200) { // 200 = "OK"
+                    var response = JSON.parse(xmlhttp.responseText);
+                    successFn(response);
+                } else {
+                    alert("http connection error: status[" + xmlhttp.status + "], " + xmlhttp.statusText);
+                }
+            }
+        }
+        xmlhttp.open("GET", url, true);
+        xmlhttp.send();
+    }
+
+    /**
+     * 时间秒数格式化为日期时间字符串形式
+     * @param {number} second 时间秒数
+     * @returns {string} 日期时间字符串
+     */
+    function formatDateTime(second) {
+        var date = new Date(second * 1000);
+        var y = date.getFullYear();
+        var m = date.getMonth() + 1;
+        m = m < 10 ? ('0' + m) : m;
+        var d = date.getDate();
+        d = d < 10 ? ('0' + d) : d;
+        var h = date.getHours();
+        h = h < 10 ? ('0' + h) : h;
+        var minute = date.getMinutes();
+        minute = minute < 10 ? ('0' + minute) : minute;
+        var second = date.getSeconds();
+        second = second < 10 ? ('0' + second) : second;
+        return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second;
+    }
+
+    /**
+     * 锁开关状态
+     * @param {number} status 锁开关状态值
+     * @returns {string} 锁开关状态
+     */
+    function parseStatus(status) {
+        if (status == 0) {
+            return "关锁";
+        } else if (status == 1) {
+            return "开锁";
+        } else {
+            return "未知";
+        }
+    }
+
+    /**
+     * 是否报警
+     * @param {number} alarm 报警状态值
+     * @returns {string} 是否报警
+     */
+    function parseAlarm(alarm) {
+        if (alarm == 0) {
+            return "无";
+        } else if (alarm == 1) {
+            return "报警";
+        } else {
+            return "未知";
+        }
+    }
+
+    /**
+     * 锁打开状态
+     * @param {number} open 锁打开状态值
+     * @returns {string} 锁打开状态
+     */
+    function parseOpen(open) {
+        switch (open) {
+            case 0:
+                return "未开启";
+            case 1:
+                return "本次解封已开启";
+            case 2:
+                return "之前解封已开启";
+            default:
+                return "未知";
+        }
+    }
+
+    window.onload = function () {
+        bindEvent($("tbl_box"), "scroll", function (event) {
+            $("tbl_head").style.transform = "translateY(" + event.target.scrollTop + "px)";
+        });
+
+        ajaxGet("/action/status_locks_get", function (response) {
+            if (response.errno < 0) {
+                alert(response.errmsg);
+                return;
+            }
+            var datas = response.datas;
+            var len = datas.length;
+            if (len < 1) {
+                alert("无锁状态信息！")
+            }
+
+            var tbody_html = "";
+            for (var i = 0; i < len; i++) {
+                var data = datas[i];
+                tbody_html += "<tr><td class='lockid'>" + data.lockid + "</td>" +
+                    "<td class='status'>" + parseStatus(data.status) + "</td>" +
+                    "<td class='alarm'>" + parseAlarm(data.alarm) + "</td>" +
+                    "<td class='lowpower'>" + parseAlarm(data.lowpower) + "</td>" +
+                    "<td class='emalarm'>" + parseAlarm(data.emalarm) + "</td>" +
+                    "<td class='commalarm'>" + parseAlarm(data.commalarm) + "</td>" +
+                    "<td class='opened'>" + parseOpen(data.opened) + "</td>" +
+                    "<td class='lastrecvdatetime'>" + formatDateTime(data.lastrecvdatetime) + "</td></tr>";
+            }
+            $("tbl_body").innerHTML = tbody_html;
+        })
+
+    }
+</script>

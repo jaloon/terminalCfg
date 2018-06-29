@@ -3,36 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <title>锁参数</title>
-    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="../css/base.css">
     <style>
-        #tbl_box {
-            /**make table can scroll**/
-            max-height: 200px;
-            overflow: auto;
-            /** add some style**/
-            /*padding: 2px;*/
-            background: #ddd;
-            margin: 20px 10px;
-            box-shadow: 0 0 1px 3px #ddd;
+        .lockid {
+            width: 260px;
         }
+
+        .type {
+            width: 200px;
+        }
+
+        .svr_idx {
+            width: 240px;
+        }
+
+        .barn_id {
+            width: 500px;
+        }
+
+        .barn_idx {
+            width: 300px;
+        }
+
+        .open_dis {
+            width: 300px;
+        }
+
+        .bind_status {
+            width: 240px;
+        }
+
     </style>
 </head>
 <body>
-<div class='table-cont' id='tbl_box'>
-    <table>
-        <thead id="tbl_head">
-        <tr>
-            <th class="lockid">编号</th>
-            <th class="type">类型</th>
-            <th class="svr_idx">服务器编号</th>
-            <th class="barn_id">仓号</th>
-            <th class="barn_idx">同仓编号</th>
-            <th class="open_dis">是否可打开</th>
-            <th class="bind_status">绑定状态</th>
-        </tr>
-        </thead>
-        <tbody id="tbl_body"></tbody>
-    </table>
+<div class="container">
+    <div class="tbl-wrap">
+        <div class="tbl-box" id="tbl_box">
+            <table>
+                <thead class="tbl-head" id="tbl_head">
+                <tr>
+                    <th class="lockid">编号</th>
+                    <th class="type">类型</th>
+                    <th class="svr_idx">服务器编号</th>
+                    <th class="barn_id">仓号</th>
+                    <th class="barn_idx">同仓编号</th>
+                    <th class="open_dis">是否可打开</th>
+                    <th class="bind_status">绑定状态</th>
+                </tr>
+                </thead>
+                <tbody class="tbl-body" id="tbl_body"></tbody>
+            </table>
+        </div>
+    </div>
 </div>
 </body>
 </html>

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>普利通电子签封安全监管系统</title>
+    <link rel="stylesheet" href="../css/index_1.css">
+</head>
+<body>
+<div class="container">
+    <div class="top">
+        <div class="logo-zone">
+            <img src="../img/commen-logo.png"/>
+            <span class="logo-text">普利通电子签封安全监管系统</span>
+        </div>
+    </div>
+    <div class="left-nav">
+        <!--参数-->
+        <dl>
+            <dt class="nav-el" id="param_dev">设备参数</dt>
+        </dl>
+        <dl>
+            <dt class="nav-el" id="param_adhoc">自组网参数</dt>
+        </dl>
+        <dl>
+            <dt class="nav-el" id="param_locks">锁参数</dt>
+        </dl>
+        <dl>
+            <dt class="nav-el" id="param_mobile">移动网络参数</dt>
+        </dl>
+        <dl>
+            <dt class="nav-el" id="param_server">服务器参数</dt>
+        </dl>
+        <hr/>
+        <!--状态-->
+        <dl>
+            <dt class="nav-el" id="status_dev">设备状态</dt>
+        </dl>
+        <dl>
+            <dt class="nav-el" id="status_gps">GPS状态</dt>
+        </dl>
+        <dl>
+            <dt class="nav-el" id="status_locks">锁状态</dt>
+        </dl>
+        <hr/>
+        <!--记录-->
+        <dl>
+            <dt class="nav-el" id="record_alarm">报警记录</dt>
+        </dl>
+        <dl>
+            <dt class="nav-el" id="record_clearalarm">清除报警记录</dt>
+        </dl>
+        <dl>
+            <dt class="nav-el" id="record_devstatus">设备状态变更记录</dt>
+        </dl>
+        <dl>
+            <dt class="nav-el" id="record_gps">GPS记录</dt>
+        </dl>
+        <dl>
+            <dt class="nav-el" id="record_lockopenreset">开锁重置记录</dt>
+        </dl>
+        <dl>
+            <dt class="nav-el" id="record_lockstatus">锁状态变更记录</dt>
+        </dl>
+        <hr/>
+        <!--配送信息-->
+        <dl>
+            <dt class="nav-el" id="distinfo">配送信息</dt>
+        </dl>
+        <hr/>
+        <!--基础数据-->
+        <dl>
+            <dt class="nav-el" id="basedata_emcard">应急卡</dt>
+        </dl>
+        <dl>
+            <dt class="nav-el" id="basedata_ioocard">出入库卡</dt>
+        </dl>
+        <dl>
+            <dt class="nav-el" id="basedata_ioodev">出入库设备</dt>
+        </dl>
+        <dl>
+            <dt class="nav-el" id="basedata_macard">管理卡</dt>
+        </dl>
+        <dl>
+            <dt class="nav-el" id="basedata_oildepot">油库</dt>
+        </dl>
+        <hr/>
+        <dl>
+            <dt class="nav-el" id="log">日志</dt>
+        </dl>
+    </div>
+    <div class="main">
+        <iframe id="box" src="param_dev.html" frameborder="0" name="showContent" width="100%"
+                height="100%"></iframe>
+    </div>
+</div>
+</body>
+</html>
+
+<script>
+    function $(elementId) {
+        return document.getElementById(elementId);
+    }
+
+    function bindEvent(element, event, fn) {
+        if (element.addEventListener) {
+            // 现代浏览器
+            element.addEventListener(event, fn);
+        } else if (element.attchEvent) {
+            // IE8及更早版本和Opear 7.0及更早版本
+            element.attchEvent(event, fn);
+        }
+    }
+
+    window.onload = function () {
+        var activeNavEl;
+        var box = $("box");
+
+        function setBoxSize() {
+            box.height = window.innerHeight - 66;
+            box.width = window.innerWidth - 200;
+        }
+
+        setBoxSize();
+        window.onresize = setBoxSize;
+
+
+        var navEls = document.getElementsByClassName("nav-el");
+        for (var i = 0; i < navEls.length; i++) {
+            bindEvent(navEls[i], "click", function (event) {
+                if (activeNavEl != undefined) {
+                    activeNavEl.className = "nav-el";
+                }
+                activeNavEl = event.target;
+                activeNavEl.className = "active-el";
+                window.showContent.location.href = activeNavEl.id + ".html";
+            });
+        }
+    }
+
+
+</script>
+

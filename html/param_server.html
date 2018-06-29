@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>服务器参数</title>
-    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="../css/base.css">
 </head>
 <body>
 <div class="container">
@@ -11,113 +11,113 @@
         <tr>
             <td>业务服务器IP</td>
             <td>
-                <input type="text" class="param" id="business_svr_ip" placeholder="最大长度255" readonly>
+                <input type="text" class="item" id="business_svr_ip" placeholder="最大长度255" readonly>
             </td>
         </tr>
         <tr>
             <td>业务服务器端口</td>
             <td>
-                <input type="number" min="0" max="65535" step="1" class="param" id="business_svr_port"
+                <input type="number" min="0" max="65535" step="1" class="item" id="business_svr_port"
                        placeholder="数值范围 0 ~ 65535" readonly>
             </td>
         </tr>
         <tr>
             <td>业务服务器RC4KEY</td>
             <td>
-                <input type="text" class="param" id="business_svr_rc4key" placeholder="最大长度128" readonly>
+                <input type="text" class="item" id="business_svr_rc4key" placeholder="最大长度128" readonly>
             </td>
         </tr>
         <tr>
             <td>业务服务器RC4Key版本</td>
             <td>
-                <input type="number" min="0" max="255" step="1" class="param" id="business_svr_rc4key_ver"
+                <input type="number" min="0" max="255" step="1" class="item" id="business_svr_rc4key_ver"
                        placeholder="数值范围 0 ~ 255" readonly>
             </td>
         </tr>
         <tr>
             <td>通用服务器地址</td>
             <td>
-                <input type="text" class="param" id="common_svr_addr" placeholder="最大长度511">
+                <input type="text" class="item" id="common_svr_addr" placeholder="最大长度511">
             </td>
         </tr>
         <tr>
             <td>通用服务器RC4Key版本</td>
             <td>
-                <input type="number" min="0" max="255" step="1" class="param" id="common_svr_rc4key_ver"
+                <input type="number" min="0" max="255" step="1" class="item" id="common_svr_rc4key_ver"
                        placeholder="数值范围 0 ~ 255">
             </td>
         </tr>
         <tr>
             <td>通用服务器RC4KEY</td>
             <td>
-                <input type="text" class="param" id="common_svr_rc4key" placeholder="最大长度128">
+                <input type="text" class="item" id="common_svr_rc4key" placeholder="最大长度128">
             </td>
         </tr>
         <tr>
             <td>重连次数</td>
             <td>
-                <input type="number" min="0" max="60" step="1" class="param" id="reretry_time"
+                <input type="number" min="0" max="60" step="1" class="item" id="reretry_time"
                        placeholder="数值范围 0 ~ 60">
             </td>
         </tr>
         <tr>
             <td>重连间隔</td>
             <td>
-                <input type="number" min="10" max="65535" step="1" class="param" id="reretry_intvl"
+                <input type="number" min="10" max="65535" step="1" class="item" id="reretry_intvl"
                        placeholder="数值范围 10 ~ 65535">
             </td>
         </tr>
         <tr>
             <td>GPS采集频率</td>
             <td>
-                <input type="number" min="1" max="255" step="1" class="param" id="gps_coll_rate"
+                <input type="number" min="1" max="255" step="1" class="item" id="gps_coll_rate"
                        placeholder="数值范围 1 ~ 255" readonly>
             </td>
         </tr>
         <tr>
             <td>GPS上报频率</td>
             <td>
-                <input type="number" min="1" max="255" step="1" class="param" id="gps_rpt_rate"
+                <input type="number" min="1" max="255" step="1" class="item" id="gps_rpt_rate"
                        placeholder="数值范围 1 ~ 255" readonly>
             </td>
         </tr>
         <tr>
             <td>GPS采集距离</td>
             <td>
-                <input type="number" min="1" max="255" step="1" class="param" id="gps_coll_dist"
+                <input type="number" min="1" max="255" step="1" class="item" id="gps_coll_dist"
                        placeholder="数值范围 1 ~ 255" readonly>
             </td>
         </tr>
         <tr>
             <td>重发次数</td>
             <td>
-                <input type="number" min="0" max="10" step="1" class="param" id="resend_time" placeholder="数值范围 0 ~ 10">
+                <input type="number" min="0" max="10" step="1" class="item" id="resend_time" placeholder="数值范围 0 ~ 10">
             </td>
         </tr>
         <tr>
             <td>重发间隔</td>
             <td>
-                <input type="number" min="1" max="120" step="1" class="param" id="resend_intvl"
+                <input type="number" min="1" max="120" step="1" class="item" id="resend_intvl"
                        placeholder="数值范围 1 ~ 120">
             </td>
         </tr>
         <tr>
             <td>心跳间隔</td>
             <td>
-                <input type="number" min="30" max="240" step="1" class="param" id="heartbeat_intvl"
+                <input type="number" min="30" max="240" step="1" class="item" id="heartbeat_intvl"
                        placeholder="数值范围 30 ~ 240">
             </td>
         </tr>
         <tr>
             <td>业务ID</td>
             <td>
-                <input type="text" class="param" id="business_id" placeholder="0x01000000 ~ 0x01FFFFFF">
+                <input type="text" class="item" id="business_id" placeholder="0x01000000 ~ 0x01FFFFFF">
             </td>
         </tr>
         <tr>
             <td>基础数据服务器地址</td>
             <td>
-                <input type="text" class="param" id="basedata_path" placeholder="最大长度511" readonly>
+                <input type="text" class="item" id="basedata_path" placeholder="最大长度511" readonly>
             </td>
         </tr>
     </table>

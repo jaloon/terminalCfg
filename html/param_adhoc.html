@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>自组网参数</title>
-    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="../css/base.css">
 </head>
 <body>
 <div class="container">
@@ -11,7 +11,7 @@
         <tr>
             <td>波特率</td>
             <td>
-                <select class="param" id="spipr">
+                <select class="item" id="spipr">
                     <option value="9600">9600</option>
                     <option value="19200">19200</option>
                     <option value="38400">38400</option>
@@ -23,14 +23,14 @@
         <tr>
             <td>传输层-重传次数</td>
             <td>
-                <input type="number" min="0" max="10" step="1" class="param" id="resendttl_trans"
+                <input type="number" min="0" max="10" step="1" class="item" id="resendttl_trans"
                        placeholder="数值范围 0 ~ 10">
             </td>
         </tr>
         <tr>
             <td>传输层-是否回应</td>
             <td>
-                <select class="param" id="waitack_trans">
+                <select class="item" id="waitack_trans">
                     <option value="0">否</option>
                     <option value="1">是</option>
                 </select>
@@ -39,21 +39,21 @@
         <tr>
             <td>应用层-重传次数</td>
             <td>
-                <input type="number" min="0" max="10" step="1" class="param" id="resendttl_app"
+                <input type="number" min="0" max="10" step="1" class="item" id="resendttl_app"
                        placeholder="数值范围 0 ~ 10">
             </td>
         </tr>
         <tr>
             <td>应用层-重传间隔</td>
             <td>
-                <input type="number" min="1000" max="10000" step="1" class="param" id="resendintvl_app"
+                <input type="number" min="1000" max="10000" step="1" class="item" id="resendintvl_app"
                        placeholder="数值范围 1000 ~ 10000">
             </td>
         </tr>
         <tr>
             <td>RC4密钥</td>
             <td>
-                <input type="text" class="param" id="rc4key" placeholder="最大长度64">
+                <input type="text" class="item" id="rc4key" placeholder="最大长度64">
             </td>
         </tr>
     </table>

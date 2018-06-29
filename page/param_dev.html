@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>设备参数</title>
+    <link rel="stylesheet" href="../css/base.css">
+    <style>
+        #tbl_box tr td:first-child {
+            width: 160px;
+        }
+
+        #submit {
+            width: 100px;
+            height: 36px;
+            color: #ffffff;
+            border: 0;
+            position: relative;
+            left: 480px;
+            top: 30px;
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+    <div class="tbl-wrap">
+        <div class="item-box" id="tbl_box">
+            <table>
+                <tr>
+                    <td>车牌号</td>
+                    <td>
+                        <input type="text" class="item" id="carno" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>配送卡</td>
+                    <td>
+                        <input type="text" class="item" id="dist_card" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>手机卡</td>
+                    <td>
+                        <input type="text" class="item" id="sim_card">
+                    </td>
+                </tr>
+                <tr>
+                    <td>仓号</td>
+                    <td>
+                        <input type="text" class="item" id="barn_num" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>日志类型</td>
+                    <td>
+                        <select class="item" id="logtype">
+                            <option value="0">标准</option>
+                            <option value="1">串口</option>
+                            <option value="2">syslog</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>日志等级</td>
+                    <td>
+                        <select class="item" id="loglevel">
+                            <option value="0">信息</option>
+                            <option value="1">错误</option>
+                            <option value="2">调试</option>
+                            <option value="3">数据</option>
+                            <option value="127">关闭</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>加油站施解封GPS校验</td>
+                    <td>
+                        <input type="text" class="item" id="checkgps_ings" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>油库施解封GPS校验</td>
+                    <td>
+                        <input type="text" class="item" id="checkgps_inod" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>校验基站信息</td>
+                    <td>
+                        <input type="text" class="item" id="checkstation" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>开锁限制</td>
+                    <td>
+                        <input type="text" class="item" id="openlock_unlimit" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>加油站开锁GPS校验</td>
+                    <td>
+                        <input type="text" class="item" id="checkgps_ings_openlock" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>油库开锁GPS校验</td>
+                    <td>
+                        <input type="text" class="item" id="checkgps_inod_openlock" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>一次开锁</td>
+                    <td>
+                        <input type="text" class="item" id="openlock_once" readonly>
+                    </td>
+                </tr>
+            </table>
+
+            <input type="button" class="btn" id="submit" value="提交">
+        </div>
+    </div>
+</div>
+</body>
+</html>
+<script>
+    function funcEnable(enable) {
+        return enable == 0 ? "关闭" : "启用";
+    }
+
+    function createXmlHttp() {
+        var xmlhttp;
+        if (window.XMLHttpRequest) {
+            // code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp = new XMLHttpRequest();
+        } else {
+            // code for IE6, IE5
+            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        return xmlhttp;
+    }
+
+    function ajaxGet(url, successFn) {
+        var xmlhttp = createXmlHttp();
+        xmlhttp.onreadystatechange = function () {
+            if (xmlhttp.readyState == 4) { // 4 = "loaded"
+                if (xmlhttp.status == 200) { // 200 = "OK"
+                    var response = JSON.parse(xmlhttp.responseText);
+                    successFn(response);
+                } else {
+                    alert("http connection error: status[" + xmlhttp.status + "], " + xmlhttp.statusText);
+                }
+            }
+        }
+        xmlhttp.open("GET", url, true);
+        xmlhttp.send();
+    }
+
+    function ajaxPost(url, data, successFn) {
+        var xmlhttp = createXmlHttp();
+        xmlhttp.onreadystatechange = function () {
+            if (xmlhttp.readyState == 4) { // 4 = "loaded"
+                if (xmlhttp.status == 200) { // 200 = "OK"
+                    var response = JSON.parse(xmlhttp.responseText);
+                    successFn(response);
+                } else {
+                    alert("http connection error: status[" + xmlhttp.status + "], " + xmlhttp.statusText);
+                }
+            }
+        }
+        xmlhttp.open("POST", url, true);
+        xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xmlhttp.send(data);
+    }
+
+    function $(elementId) {
+        return document.getElementById(elementId);
+    }
+
+    function bindEvent(element, event, fn) {
+        if (element.addEventListener) {
+            // 现代浏览器
+            element.addEventListener(event, fn);
+        } else if (element.attchEvent) {
+            // IE8及更早版本和Opear 7.0及更早版本
+            element.attchEvent(event, fn);
+        }
+    }
+
+    window.onload = function () {
+        var $carno = $("carno");
+        var $dist_card = $("dist_card");
+        var $sim_card = $("sim_card");
+        var $barn_num = $("barn_num");
+        var $logtype = $("logtype");
+        var $loglevel = $("loglevel");
+        var $checkgps_ings = $("checkgps_ings");
+        var $checkgps_inod = $("checkgps_inod");
+        var $checkstation = $("checkstation");
+        var $openlock_unlimit = $("openlock_unlimit");
+        var $checkgps_ings_openlock = $("checkgps_ings_openlock");
+        var $checkgps_inod_openlock = $("checkgps_inod_openlock");
+        var $openlock_once = $("openlock_once");
+        ajaxGet("/action/param_dev_get", function (response) {
+            if (response.errno < 0) {
+                alert(response.errmsg);
+                return;
+            }
+            var data = response.datas[0];
+            $carno.value = data.carno;
+            $dist_card.value = data.dist_card;
+            $sim_card.value = data.sim_card;
+            $barn_num.value = data.barn_num;
+            $logtype.value = data.logtype;
+            $loglevel.value = data.loglevel;
+            $checkgps_ings.value = funcEnable(data.checkgps_ings);
+            $checkgps_inod.value = funcEnable(data.checkgps_inod);
+            $checkstation.value = funcEnable(data.checkstation);
+            $openlock_unlimit.value = funcEnable(data.openlock_unlimit);
+            $checkgps_ings_openlock.value = funcEnable(data.checkgps_ings_openlock);
+            $checkgps_inod_openlock.value = funcEnable(data.checkgps_inod_openlock);
+            $openlock_once.value = funcEnable(data.openlock_once);
+        });
+
+        bindEvent($("submit"), "click", function () {
+            var sim_card = $sim_card.value;
+            var logtype = $logtype.value;
+            var loglevel = $loglevel.value;
+            var data = "sim_card=" + sim_card + "&logtype=" + logtype + "&loglevel=" + loglevel;
+            ajaxPost("/action/param_dev_set", data, function (response) {
+                    if (response.errno < 0) {
+                        alert(response.errmsg);
+                        return;
+                    }
+                    alert("参数修改成功！");
+                }
+            );
+        });
+    }
+</script>

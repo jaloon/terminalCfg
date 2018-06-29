@@ -3,78 +3,97 @@
 <head>
     <meta charset="UTF-8">
     <title>移动网络参数</title>
-    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="../css/base.css">
+    <style>
+        #tbl_box tr td:first-child {
+            width: 100px;
+        }
+
+        #submit {
+            width: 100px;
+            height: 36px;
+            color: #ffffff;
+            border: 0;
+            position: relative;
+            left: 480px;
+            top: 30px;
+        }
+    </style>
 </head>
 <body>
 <div class="container">
-    <table>
-        <tr>
-            <td>APN</td>
-            <td>
-                <input type="text" class="param" id="apn" placeholder="最大长度63">
-            </td>
-        </tr>
-        <tr>
-            <td>拨号中心号码</td>
-            <td>
-                <input type="text" class="param" id="cent" placeholder="最大长度63">
-            </td>
-        </tr>
-        <tr>
-            <td>用户名</td>
-            <td>
-                <input type="text" class="param" id="username" placeholder="最大长度63">
-            </td>
-        </tr>
-        <tr>
-            <td>密码</td>
-            <td>
-                <input type="text" class="param" id="password" placeholder="最大长度63">
-            </td>
-        </tr>
-        <tr>
-            <td>短信中心</td>
-            <td>
-                <input type="text" class="param" id="smscent" placeholder="最大长度63">
-            </td>
-        </tr>
-        <tr>
-            <td>PPP认证类型</td>
-            <td>
-                <select class="param" id="pppauth">
-                    <option value="0">任意</option>
-                    <option value="1">PAP</option>
-                    <option value="2">CHAP</option>
-                </select>
-            </td>
-        </tr>
-        <tr>
-            <td>重拨次数</td>
-            <td>
-                <input type="number" min="0" max="255" step="1" class="param" id="redial" placeholder="">
-            </td>
-        </tr>
-        <tr>
-            <td>重置次数</td>
-            <td>
-                <input type="number" min="0" max="255" step="1" class="param" id="reset" placeholder="">
-            </td>
-        </tr>
-        <tr>
-            <td>本地IP</td>
-            <td>
-                <input type="text" class="param" id="localip" placeholder="最大长度63">
-            </td>
-        </tr>
-        <tr>
-            <td>远程IP</td>
-            <td>
-                <input type="text" class="param" id="remoteip" placeholder="最大长度63">
-            </td>
-        </tr>
-    </table>
+    <div class="tbl-wrap">
+        <div class="item-box" id="tbl_box">
+            <table>
+                <tr>
+                    <td>APN</td>
+                    <td>
+                        <input type="text" class="item" id="apn" placeholder="最大长度63">
+                    </td>
+                </tr>
+                <tr>
+                    <td>拨号中心号码</td>
+                    <td>
+                        <input type="text" class="item" id="cent" placeholder="最大长度63">
+                    </td>
+                </tr>
+                <tr>
+                    <td>用户名</td>
+                    <td>
+                        <input type="text" class="item" id="username" placeholder="最大长度63">
+                    </td>
+                </tr>
+                <tr>
+                    <td>密码</td>
+                    <td>
+                        <input type="text" class="item" id="password" placeholder="最大长度63">
+                    </td>
+                </tr>
+                <tr>
+                    <td>短信中心</td>
+                    <td>
+                        <input type="text" class="item" id="smscent" placeholder="最大长度63">
+                    </td>
+                </tr>
+                <tr>
+                    <td>PPP认证类型</td>
+                    <td>
+                        <select class="item" id="pppauth">
+                            <option value="0">任意</option>
+                            <option value="1">PAP</option>
+                            <option value="2">CHAP</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>重拨次数</td>
+                    <td>
+                        <input type="number" min="0" max="255" step="1" class="item" id="redial" placeholder="">
+                    </td>
+                </tr>
+                <tr>
+                    <td>重置次数</td>
+                    <td>
+                        <input type="number" min="0" max="255" step="1" class="item" id="reset" placeholder="">
+                    </td>
+                </tr>
+                <tr>
+                    <td>本地IP</td>
+                    <td>
+                        <input type="text" class="item" id="localip" placeholder="最大长度63">
+                    </td>
+                </tr>
+                <tr>
+                    <td>远程IP</td>
+                    <td>
+                        <input type="text" class="item" id="remoteip" placeholder="最大长度63">
+                    </td>
+                </tr>
+            </table>
 
-    <input type="button" class="btn" id="submit" value="提交">
+            <input type="button" class="btn" id="submit" value="提交">
+        </div>
+    </div>
 </div>
 </body>
 </html>

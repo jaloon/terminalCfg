@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>设备参数</title>
-    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="../css/base.css">
     <style>
         #tbl_box tr td:first-child {
             width: 160px;
@@ -25,7 +25,7 @@
 <div class="container">
     <div class="top">
         <div class="logo-zone">
-            <img src="img/commen-logo.png"/>
+            <img src="../img/commen-logo.png"/>
             <span class="logo-text">普利通电子签封安全监管系统</span>
         </div>
     </div>
@@ -34,7 +34,7 @@
             <dl>
                 <dt class="active-el" id="param" url="param_dev.html">
                     参数
-                    <img src="img/nav_down_12.png"/>
+                    <img src="../img/nav_down_12.png"/>
                 </dt>
                 <dd class="first-dd">
                     <div class="active-el" url="param_dev.html">设备参数</div>
@@ -55,13 +55,13 @@
             <dl>
                 <dt class="nav-el" id="status" url="status_dev.html">
                     状态
-                    <img src="img/nav_right_12.png"/>
+                    <img src="../img/nav_right_12.png"/>
                 </dt>
             </dl>
             <dl>
                 <dt class="nav-el" id="record" url="record_alarm.html">
                     记录
-                    <img src="img/nav_right_12.png"/>
+                    <img src="../img/nav_right_12.png"/>
                 </dt>
             </dl>
             <dl>
@@ -70,7 +70,7 @@
             <dl>
                 <dt class="nav-el" id="basedata" url="param_dev.html">
                     基础数据
-                    <img src="img/nav_right_12.png"/>
+                    <img src="../img/nav_right_12.png"/>
                 </dt>
             </dl>
             <dl>
@@ -79,36 +79,36 @@
         </div>
         <div class="right-box">
             <div class="tbl-wrap">
-                <div class="param-box" id="tbl_box">
+                <div class="item-box" id="tbl_box">
                     <table>
                         <tr>
                             <td>车牌号</td>
                             <td>
-                                <input type="text" class="param" id="carno" readonly>
+                                <input type="text" class="item" id="carno" readonly>
                             </td>
                         </tr>
                         <tr>
                             <td>配送卡</td>
                             <td>
-                                <input type="text" class="param" id="dist_card" readonly>
+                                <input type="text" class="item" id="dist_card" readonly>
                             </td>
                         </tr>
                         <tr>
                             <td>手机卡</td>
                             <td>
-                                <input type="text" class="param" id="sim_card">
+                                <input type="text" class="item" id="sim_card">
                             </td>
                         </tr>
                         <tr>
                             <td>仓号</td>
                             <td>
-                                <input type="text" class="param" id="barn_num" readonly>
+                                <input type="text" class="item" id="barn_num" readonly>
                             </td>
                         </tr>
                         <tr>
                             <td>日志类型</td>
                             <td>
-                                <select class="param" id="logtype">
+                                <select class="item" id="logtype">
                                     <option value="0">标准</option>
                                     <option value="1">串口</option>
                                     <option value="2">syslog</option>
@@ -118,7 +118,7 @@
                         <tr>
                             <td>日志等级</td>
                             <td>
-                                <select class="param" id="loglevel">
+                                <select class="item" id="loglevel">
                                     <option value="0">信息</option>
                                     <option value="1">错误</option>
                                     <option value="2">调试</option>
@@ -130,43 +130,43 @@
                         <tr>
                             <td>加油站施解封GPS校验</td>
                             <td>
-                                <input type="text" class="param" id="checkgps_ings" readonly>
+                                <input type="text" class="item" id="checkgps_ings" readonly>
                             </td>
                         </tr>
                         <tr>
                             <td>油库施解封GPS校验</td>
                             <td>
-                                <input type="text" class="param" id="checkgps_inod" readonly>
+                                <input type="text" class="item" id="checkgps_inod" readonly>
                             </td>
                         </tr>
                         <tr>
                             <td>校验基站信息</td>
                             <td>
-                                <input type="text" class="param" id="checkstation" readonly>
+                                <input type="text" class="item" id="checkstation" readonly>
                             </td>
                         </tr>
                         <tr>
                             <td>开锁限制</td>
                             <td>
-                                <input type="text" class="param" id="openlock_unlimit" readonly>
+                                <input type="text" class="item" id="openlock_unlimit" readonly>
                             </td>
                         </tr>
                         <tr>
                             <td>加油站开锁GPS校验</td>
                             <td>
-                                <input type="text" class="param" id="checkgps_ings_openlock" readonly>
+                                <input type="text" class="item" id="checkgps_ings_openlock" readonly>
                             </td>
                         </tr>
                         <tr>
                             <td>油库开锁GPS校验</td>
                             <td>
-                                <input type="text" class="param" id="checkgps_inod_openlock" readonly>
+                                <input type="text" class="item" id="checkgps_inod_openlock" readonly>
                             </td>
                         </tr>
                         <tr>
                             <td>一次开锁</td>
                             <td>
-                                <input type="text" class="param" id="openlock_once" readonly>
+                                <input type="text" class="item" id="openlock_once" readonly>
                             </td>
                         </tr>
                     </table>

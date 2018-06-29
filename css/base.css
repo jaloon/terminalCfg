@@ -136,6 +136,43 @@ dd.nav-el {
     position: relative;
 }
 
+.search-wrap{
+    width: 100%;
+    height: 50px;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    padding: 10px;
+}
+
+.param {
+    line-height: 28px;
+    border: 1px solid #d7dbe2;
+    border-radius: 3px;
+    padding: 0 6px 0 6px;
+    color: #57647c;
+}
+
+label.param{
+    border: 0;
+}
+
+input.param {
+    height: 28px;
+    width: 160px;
+}
+
+select.param {
+    height: 30px;
+    width: 160px;
+}
+
+#search_btn{
+    width: 100px;
+    height: 30px;
+    margin-left: 20px;
+}
+
 .tbl-wrap {
     position: absolute;
     width: 100%;
@@ -198,7 +235,7 @@ dd.nav-el {
     bottom: 0;
     z-index: 100;
     background: rgba(0, 0, 0, 0.7);
-    /*display: none;*/
+    display: none;
 }
 
 .hidden-box {
@@ -234,7 +271,7 @@ dd.nav-el {
     color: red;
 }
 
-.param-box {
+.item-box {
     width: 100%;
     box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -246,18 +283,20 @@ dd.nav-el {
     color: #445065;
 }
 
-.param-box tr {
+.item-box tr {
     height: 36px;
 }
 
-.param-box tr td:first-child {
+.item-box tr td:first-child {
     width: 80px;
 }
 
 .btn {
-    cursor: pointer;
     background: #478de4;
+    color: #ffffff;
+    border: 0;
     border-radius: 3px;
+    cursor: pointer;
 }
 
 .btn:hover {
@@ -273,7 +312,7 @@ input[readonly] {
     background: #e6e7e9;
 }
 
-.param {
+.item {
     line-height: 26px;
     border: 1px solid #d7dbe2;
     border-radius: 3px;
@@ -281,17 +320,17 @@ input[readonly] {
     color: #57647c;
 }
 
-input.param {
+input.item {
     height: 26px;
     width: 384px;
 }
 
-select.param {
+select.item {
     height: 28px;
     width: 398px;
 }
 
-div.param {
+div.item {
     height: 26px;
     width: 384px;
     background: #e6e7e9;
