@@ -1,0 +1,380 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html,
+body {
+    height: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+.container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    font-family: "微软雅黑";
+    cursor: default;
+}
+
+.top {
+    width: 100%;
+    height: 60px;
+    background-color: #478de4;
+}
+
+.logo-zone {
+    height: 22px;
+    width: 600px;
+    position: relative;
+    left: 20px;
+    top: 19px;
+}
+
+.logo-text {
+    height: 22px;
+    line-height: 22px;
+    color: #ffffff;
+    font-size: 24px;
+    font-weight: 500;
+    position: relative;
+    top: -3px;
+    left: 15px;
+    cursor: default;
+}
+
+.main {
+    width: 100%;
+    position: absolute;
+    top: 60px;
+    left: 0;
+    bottom: 0;
+}
+
+.left-nav {
+    width: 200px;
+    height: 100%;
+    background-color: #445065;
+    float: left;
+}
+
+/* nav start */
+dt.nav-el {
+    background: #445065 no-repeat 10px center;
+    cursor: pointer;
+}
+
+dd.nav-el {
+    background: #57647c no-repeat 10px center;
+    cursor: pointer;
+}
+
+.nav-el:hover {
+    background-color: #3e81d5;
+}
+
+.active-el {
+    background: #478de4 no-repeat 10px center;
+    cursor: pointer;
+}
+
+.left-nav dt {
+    padding-left: 40px;
+    padding-right: 10px;
+    height: 46px;
+    color: #f5f5f5;
+    font-size: 16px;
+    position: relative;
+    line-height: 46px;
+}
+
+.left-nav dd {
+    height: 30px;
+    vertical-align: middle;
+    background-color: #57647c;
+    cursor: pointer;
+}
+
+.left-nav dd div {
+    height: 30px;
+    width: 160px;
+    font-size: 14px;
+    color: #f5f5f5;
+    padding-left: 40px;
+    line-height: 30px;
+}
+
+.left-nav dt img {
+    position: absolute;
+    right: 10px;
+    top: 18px;
+}
+
+.left-nav dl:first-child {
+    padding-top: 15px;
+}
+
+.first-dd {
+    padding-top: 10px;
+}
+
+.left-nav dl dd:last-child {
+    padding-bottom: 10px;
+}
+
+/* nav end */
+
+.right-box {
+    margin-left: 200px;
+    height: 100%;
+    /*background: #f2f2f2;*/
+    position: relative;
+}
+
+.search-wrap{
+    width: 100%;
+    height: 50px;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    padding: 10px;
+}
+
+.param {
+    line-height: 28px;
+    border: 1px solid #d7dbe2;
+    border-radius: 3px;
+    padding: 0 6px 0 6px;
+    color: #57647c;
+}
+
+label.param{
+    border: 0;
+}
+
+input.param {
+    height: 28px;
+    width: 160px;
+}
+
+select.param {
+    height: 30px;
+    width: 160px;
+}
+
+#search_btn{
+    width: 100px;
+    height: 30px;
+    margin-left: 20px;
+}
+
+.tbl-wrap {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    padding: 10px;
+}
+
+.tbl-box {
+    /**make table can scroll**/
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    overflow: auto;
+    /** add some style**/
+    box-shadow: 0 0 1px 3px #e6e7e9;
+}
+
+.tbl-box th {
+    text-align: center;
+    vertical-align: middle;
+    height: 36px;
+}
+
+.tbl-box td {
+    text-align: center;
+    vertical-align: middle;
+    height: 30px;
+    border-bottom: 1px solid #e6e7e9;
+}
+
+.tbl-head {
+    width: 100%;
+    height: 36px;
+    color: #445065;
+    font-weight: 500;
+    background: #e6e7e9;
+}
+
+.tbl-body {
+    width: 100%;
+    color: #5a6779;
+    font-size: 13px;
+    /*内容超出容器只显示垂直滚动条*/
+    overflow: auto;
+}
+
+.pagination {
+    width: 100%;
+    height: 45px;
+    text-align: center;
+    padding: 10px 0px;
+    /*background: #e6e7e9;*/
+    /*box-shadow: 0 0 1px 3px #e6e7e9;*/
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+}
+
+
+.hidden-shade {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    margin: auto;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 100;
+    background: rgba(0, 0, 0, 0.7);
+    display: none;
+}
+
+.hidden-box {
+    position: fixed;
+    background: #ffffff;
+    margin: auto;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 101;
+    cursor: default;
+}
+
+.hidden-title {
+    padding: 5px 10px;
+    height: 26px;
+    font-size: 16px;
+    color: #ffffff;
+    background: #478de4;
+}
+
+.hidden-close {
+    float: right;
+    font-size: 26px;
+    cursor: pointer;
+    display: inline-block;
+    height: 26px;
+    line-height: 26px;
+}
+
+.hidden-close:hover {
+    color: red;
+}
+
+.item-box {
+    width: 100%;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    position: relative;
+    padding: 15px 20px;
+    font-size: 14px;
+    color: #445065;
+}
+
+.item-box tr {
+    height: 36px;
+}
+
+.item-box tr td:first-child {
+    width: 160px;
+}
+
+.btn {
+    background: #478de4;
+    color: #ffffff;
+    border: 0;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background: #5ca1f7;
+}
+
+.btn:disabled {
+    background: #c4ccd2;
+    cursor: default;
+}
+
+#submit {
+    width: 100px;
+    height: 36px;
+    color: #ffffff;
+    border: 0;
+    position: relative;
+    left: 460px;
+    top: 30px;
+}
+
+input[readonly] {
+    background: #e6e7e9;
+}
+
+.item {
+    line-height: 26px;
+    border: 1px solid #d7dbe2;
+    border-radius: 3px;
+    padding: 0 6px 0 6px;
+    color: #57647c;
+}
+
+input.item {
+    height: 26px;
+    width: 384px;
+}
+
+select.item {
+    height: 28px;
+    width: 398px;
+}
+
+div.item {
+    min-height: 26px;
+    width: 384px;
+    background: #e6e7e9;
+    cursor: text;
+}
+
+input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
+    /* WebKit browsers */
+    color: #999;
+}
+
+input:-moz-placeholder, textarea:-moz-placeholder {
+    /* Mozilla Firefox 4 to 18 */
+    color: #999;
+}
+
+input::-moz-placeholder, textarea::-moz-placeholder {
+    /* Mozilla Firefox 19+ */
+    color: #999;
+}
+
+input:-ms-input-placeholder, textarea:-ms-input-placeholder {
+    /* Internet Explorer 10+ */
+    color: #999;
+}

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>设备状态</title>
+    <link rel="stylesheet" href="../css/base.css">
+</head>
+<body>
+<div class="container">
+    <div class="tbl-wrap">
+        <div class="item-box" id="tbl_box">
+            <table>
+                <tr>
+                    <td>状态</td>
+                    <td>
+                        <input type="text" class="item" id="status" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>前状态</td>
+                    <td>
+                        <input type="text" class="item" id="statusbf" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>配送单状态</td>
+                    <td>
+                        <input type="text" class="item" id="diststatus" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>越界报警</td>
+                    <td>
+                        <input type="text" class="item" id="dev_alarm_outrange" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>站点编号</td>
+                    <td>
+                        <input type="text" class="item" id="station_id" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>出入库设备编号</td>
+                    <td>
+                        <input type="text" class="item" id="inout_reader_id" readonly>
+                    </td>
+                </tr>
+				<tr>
+                    <td>允许操作锁信息</td>
+                    <td>
+                        <input type="text" class="item" id="allow_lock" readonly>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+<script src="../js/base.js"></script>
+<script>
+    window.onload = function () {
+        ajaxGet("/action/status_dev_get", function (response) {
+            if (response.errno < 0) {
+                alert(response.errmsg);
+                return;
+            }
+            var data = response.datas[0];
+            _$("status").value = parseDevStatus(data.status);
+            _$("statusbf").value = parseDevStatus(data.statusbf);
+            _$("diststatus").value = data.diststatus == 0 ? "未同步" : data.diststatus == 0 ? "已同步" : "未知(" + data.diststatus + ")";
+            _$("dev_alarm_outrange").value = data.dev_alarm_outrange == 0 ? "否" : data.dev_alarm_outrange == 1 ? "是" : "未知(" + data.dev_alarm_outrange + ")";
+            _$("station_id").value = data.station_id;
+			_$("inout_reader_id").value = data.reader_dev_id;
+			_$("allow_lock").value = data.allow_lock;
+        });
+    }
+</script>

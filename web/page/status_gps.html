@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>GPS状态</title>
+    <link rel="stylesheet" href="../css/base.css">
+</head>
+<body>
+<div class="container">
+    <div class="tbl-wrap">
+        <div class="item-box" id="tbl_box">
+            <table>
+                <tr>
+                    <td>开始时间</td>
+                    <td>
+                        <input type="text" class="item" id="real_start_time" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>结束时间</td>
+                    <td>
+                        <input type="text" class="item" id="real_end_time" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>上报间隔</td>
+                    <td>
+                        <input type="text" class="item" id="real_rpt_intvl" readonly>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+<script src="../js/base.js"></script>
+<script>
+    window.onload = function () {
+        ajaxGet("/action/status_gps_get", function (response) {
+            if (response.errno < 0) {
+                alert(response.errmsg);
+                return;
+            }
+            if (response.datas.length < 1) {
+                return;
+            }
+            var data = response.datas[0];
+            _$("real_start_time").value = formatDateTime(data.real_start_time);
+            _$("real_end_time").value = formatDateTime(data.real_end_time);
+            _$("real_rpt_intvl").value = data.real_rpt_intvl;
+        });
+    }
+</script>

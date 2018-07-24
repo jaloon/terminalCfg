@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>GPS记录</title>
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/pagination.css">
+    <style>
+
+        .id {
+            width: 260px;
+        }
+
+        .datetime {
+            width: 240px;
+        }
+
+        .gps_valid {
+            width: 300px;
+        }
+
+        .gps_lon {
+            width: 300px;
+        }
+
+        .gps_lat {
+            width: 300px;
+        }
+
+        .gps_speed {
+            width: 300px;
+        }
+
+        .gps_angle {
+            width: 300px;
+        }
+
+        .devstatus {
+            width: 300px;
+        }
+
+        .devalarm {
+            width: 300px;
+        }
+
+        .uploadstatus {
+            width: 300px;
+        }
+
+        .uploadtype {
+            width: 300px;
+        }
+
+        .locknum {
+            width: 300px;
+        }
+
+        .lockinfo {
+            width: 300px;
+        }
+
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="tbl-wrap" id="tbl_wrap">
+        <div class="tbl-box" id="tbl_box">
+            <table>
+                <thead class="tbl-head" id="tbl_head">
+                <tr>
+                    <th class="id">编号</th>
+                    <th class="datetime">时间</th>
+                    <th class="gps_valid">GPS是否有效</th>
+                    <th class="gps_lon">经度</th>
+                    <th class="gps_lat">纬度</th>
+                    <th class="gps_speed">速度</th>
+                    <th class="gps_angle">角度</th>
+                    <th class="devstatus">设备状态</th>
+                    <th class="devalarm">设备报警</th>
+                    <th class="uploadstatus">上传状态</th>
+                    <th class="uploadtype">上传通道</th>
+                    <th class="locknum">锁数量</th>
+                    <th class="lockinfo">锁信息</th>
+                </tr>
+                </thead>
+                <tbody class="tbl-body" id="tbl_body"></tbody>
+            </table>
+        </div>
+        <div class="pagination" id="page">
+        </div>
+    </div>
+</div>
+</body>
+</html>
+<script src="../js/base.js"></script>
+<script src="../js/jquery-1.8.3.min.js"></script>
+<script src="../js/pagination.js"></script>
+<script>
+    var currentPage = 1;
+
+    /**
+     * 获取GPS记录
+     * @param {number} startpage 分页起始数量
+     * @param {number} pagettl 记录总数
+     */
+    function getGPSRecord(startpage, pagettl) {
+        var url = "/action/record_gps_get";
+        var param = "";
+        if (startpage != undefined && startpage != null) {
+            param += "&startpage=" + startpage;
+        }
+        if (pagettl != undefined && pagettl != null) {
+            param += "&pagettl=" + pagettl;
+        }
+        if (param.length > 0) {
+            param = param.slice(1);
+            url += "?" + param;
+        }
+        ajaxGet(url, function (response) {
+            if (response.errno < 0) {
+                alert(response.errmsg);
+                return;
+            }
+            var datas = response.datas;
+            var len = datas.length;
+            // if (len < 1) {
+            //     alert("无GPS记录信息！")
+            // }
+
+            var tbody_html = "";
+            for (var i = 0; i < len; i++) {
+                var data = datas[i];
+                tbody_html += "<tr><td class='id'>" + data.id + "</td>" +
+                    "<td class='datetime'>" + formatDateTime(data.datetime) + "</td>" +
+                    "<td class='gps_valid'>" + validGps(data.gps_valid) + "</td>" +
+                    "<td class='gps_lon'>" + data.gps_lon + "</td>" +
+                    "<td class='gps_lat'>" + data.gps_lat + "</td>" +
+                    "<td class='gps_speed'>" + data.gps_speed + "</td>" +
+                    "<td class='gps_angle'>" + data.gps_angle + "</td>" +
+                    "<td class='devstatus'>" + parseDevStatus(data.devstatus) + "</td>" +
+                    "<td class='devalarm'>" + data.devalarm + "</td>" +
+                    "<td class='uploadstatus'>" + parseUploadStatus(data.uploadstatus) + "</td>" +
+                    "<td class='uploadtype'>" + parseUploadChannel(data.uploadtype) + "</td>" +
+                    "<td class='locknum'>" + data.locknum + "</td>" +
+                    "<td class='lockinfo'>" + data.lockinfo + "</td></tr>";
+            }
+            _$("tbl_body").innerHTML = tbody_html;
+
+            $('#page').Paging({
+                pagesize: pagettl,
+                current: currentPage,
+                count: response.ttlnum,
+                toolbar:true,
+                pageSizeList: [10, 20, 30],
+                callback: function (page, size, count) {
+                    currentPage = page;
+                    startpage = (page - 1) * size;
+                    getGPSRecord(startpage, size);
+                }
+            });
+        });
+    }
+
+    function resizeTbl() {
+        _$("tbl_wrap").style.height = (document.body.clientHeight - 35) + "px";
+    }
+
+    window.onresize = resizeTbl;
+
+    window.onload = function () {
+        resizeTbl();
+
+        bindEvent(_$("tbl_box"), "scroll", function (event) {
+            _$("tbl_head").style.transform = "translateY(" + event.target.scrollTop + "px)";
+        });
+
+        getGPSRecord(0, 20);
+    }
+</script>

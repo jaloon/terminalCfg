@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>自组网参数</title>
+    <link rel="stylesheet" href="../css/base.css">
+</head>
+<body>
+<div class="container">
+    <div class="tbl-wrap">
+        <div class="item-box" id="tbl_box">
+            <table>
+                <tr>
+                    <td>波特率</td>
+                    <td>
+                        <select class="item" id="spipr">
+                            <option value="9600">9600</option>
+                            <option value="19200">19200</option>
+                            <option value="38400">38400</option>
+                            <option value="57600">57600</option>
+                            <option value="115200">115200</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>传输层-重传次数</td>
+                    <td>
+                        <input type="number" min="0" max="10" step="1" class="item" id="resendttl_trans"
+                               placeholder="数值范围 0 ~ 10">
+                    </td>
+                </tr>
+                <tr>
+                    <td>传输层-是否回应</td>
+                    <td>
+                        <select class="item" id="waitack_trans">
+                            <option value="0">否</option>
+                            <option value="1">是</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>应用层-重传次数</td>
+                    <td>
+                        <input type="number" min="0" max="10" step="1" class="item" id="resendttl_app"
+                               placeholder="数值范围 0 ~ 10">
+                    </td>
+                </tr>
+                <tr>
+                    <td>应用层-重传间隔</td>
+                    <td>
+                        <input type="number" min="1000" max="10000" step="1" class="item" id="resendintvl_app"
+                               placeholder="数值范围 1000 ~ 10000">
+                    </td>
+                </tr>
+                <tr>
+                    <td>加密密钥</td>
+                    <td>
+                        <input type="text" class="item" id="rc4key" placeholder="最大长度64">
+                    </td>
+                </tr>
+            </table>
+
+            <input type="button" class="btn" id="submit" value="提交">
+        </div>
+    </div>
+</div>
+</body>
+</html>
+<script src="../js/base.js"></script>
+<script>
+    window.onload = function () {
+        var $spipr = _$("spipr");
+        var $resendttl_trans = _$("resendttl_trans");
+        var $waitack_trans = _$("waitack_trans");
+        var $resendttl_app = _$("resendttl_app");
+        var $resendintvl_app = _$("resendintvl_app");
+        var $rc4key = _$("rc4key");
+        ajaxGet("/action/param_adhoc_get", function (response) {
+            if (response.errno < 0) {
+                alert(response.errmsg);
+                return;
+            }
+            var data = response.datas[0];
+            $spipr.value = data.spipr;
+            $resendttl_trans.value = data.resendttl_trans;
+            $waitack_trans.value = data.waitack_trans;
+            $resendttl_app.value = data.resendttl_app;
+            $resendintvl_app.value = data.resendintvl_app;
+            $rc4key.value = data.rc4key;
+        });
+
+        bindEvent(_$("submit"), "click", function () {
+            var spipr = $spipr.value;
+            var resendttl_trans = $resendttl_trans.value;
+            var waitack_trans = $waitack_trans.value;
+            var resendttl_app = $resendttl_app.value;
+            var resendintvl_app = $resendintvl_app.value;
+            var rc4key = $rc4key.value;
+            var data = "spipr=" + spipr + "&resendttl_trans=" + resendttl_trans + "&waitack_trans=" + waitack_trans
+                + "&resendttl_app=" + resendttl_app + "&resendintvl_app=" + resendintvl_app + "&$rc4key=" + rc4key;
+            ajaxPost("/action/param_adhoc_set", data, function (response) {
+                if (response.errno < 0) {
+                    alert(response.errmsg);
+                    return;
+                }
+                alert("参数修改成功！");
+            });
+        });
+    }
+</script>

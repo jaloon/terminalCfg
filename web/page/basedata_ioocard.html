@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>出入库卡</title>
+    <link rel="stylesheet" href="../css/base.css">
+    <style>
+        .id {
+            width: 400px;
+        }
+
+        .card_id {
+            width: 400px;
+        }
+
+        .type {
+            width: 500px;
+        }
+
+        .station_id {
+            width: 400px;
+        }
+
+        .owner_id {
+            width: 400px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="tbl-wrap">
+        <div class="tbl-box" id="tbl_box">
+            <table>
+                <thead class="tbl-head" id="tbl_head">
+                <tr>
+                    <th class="id">序号</th>
+                    <th class="card_id">卡号</th>
+                    <th class="type">卡类型</th>
+                    <th class="station_id">油库编号</th>
+                    <th class="owner_id">持有人ID</th>
+                </tr>
+                </thead>
+                <tbody class="tbl-body" id="tbl_body"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+<script src="../js/base.js"></script>
+<script>
+    window.onload = function () {
+        bindEvent(_$("tbl_box"), "scroll", function (event) {
+            _$("tbl_head").style.transform = "translateY(" + event.target.scrollTop + "px)";
+        });
+
+        ajaxGet("/action/basedata_ioocard_get", function (response) {
+            if (response.errno < 0) {
+                alert(response.errmsg);
+                return;
+            }
+            var datas = response.datas;
+            var len = datas.length;
+            // if (len < 1) {
+            //     alert("无出入库卡信息！")
+            // }
+
+            var tbody_html = "";
+            for (var i = 0; i < len; i++) {
+                var data = datas[i];
+                tbody_html += "<tr><td class='id'>" + data.id + "</td>" +
+                    "<td class='card_id'>" + data.card_id + "</td>" +
+                    "<td class='type'>" + parseType(data.type) + "</td>" +
+                    "<td class='station_id'>" + data.station_id + "</td>" +
+                    "<td class='owner_id'>" + isNullByStr(data.owner_id) + "</td></tr>";
+            }
+            _$("tbl_body").innerHTML = tbody_html;
+        })
+
+    }
+</script>

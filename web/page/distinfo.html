@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>配送信息</title>
+    <link rel="stylesheet" href="../css/base.css">
+    <style>
+        /*#station_box {*/
+            /*width: 520px;*/
+            /*height: 355px;*/
+        /*}*/
+
+        .dist_id {
+            width: 260px;
+        }
+
+        .barn_num {
+            width: 200px;
+        }
+
+        .gasstation_id {
+            width: 240px;
+        }
+
+        .gasstation_name {
+            width: 500px;
+        }
+
+        .status {
+            width: 300px;
+        }
+
+        .authtype {
+            width: 300px;
+        }
+
+        .authid {
+            width: 240px;
+        }
+
+        .datetime {
+            width: 300px;
+        }
+
+    </style>
+</head>
+
+<body>
+<div class="container">
+    <div class="tbl-wrap">
+        <div class="tbl-box" id="tbl_box">
+            <table>
+                <thead class="tbl-head" id="tbl_head">
+                <tr>
+                    <th class="dist_id">配送单号</th>
+                    <th class="barn_num">仓号</th>
+                    <th class="gasstation_id">加油站号</th>
+                    <th class="gasstation_name">加油站名称</th>
+                    <th class="status">状态</th>
+                    <th class="authtype">认证类型</th>
+                    <th class="authid">认证编号</th>
+                    <th class="datetime">时间</th>
+                </tr>
+                </thead>
+                <tbody class="tbl-body" id="tbl_body"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="hidden-shade" id="shade_box">
+    <div class="hidden-box" id="station_box">
+        <div class="hidden-title" id="station_title">
+            加油站信息
+            <span class="hidden-close" id="station_box_close" title="关闭">✖</span>
+        </div>
+        <div class="item-box" id="station_box_content">
+            <table id="station_table">
+                <tr>
+                    <td>加油站ID</td>
+                    <td>
+                        <input type="text" class="item" id="station_id" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>加油站名称</td>
+                    <td>
+                        <input type="text" class="item" id="station_name" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>经度</td>
+                    <td>
+                        <input type="text" class="item" id="station_lng" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>纬度</td>
+                    <td>
+                        <input type="text" class="item" id="station_lat" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>半径</td>
+                    <td>
+                        <input type="text" class="item" id="station_radius" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>普通卡</td>
+                    <td>
+                        <div class="item" id="station_card"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>加油站范围</td>
+                    <td>
+                        <div class="item" id="station_cover"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>手持机</td>
+                    <td>
+                        <div class="item" id="station_handset"></div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+<script src="../js/base.js"></script>
+<script>
+    var gasstations;
+    var commoncards;
+    var gpss;
+    var handles;
+
+    /**
+     * 根据加油站ID获取加油站名称
+     * @param {number} stationid 加油站ID
+     * @returns {string} 加油站名称
+     */
+    function getStationNameById(stationid) {
+        if (gasstations == undefined || gasstations == null || gasstations.length == 0) {
+            return "-";
+        }
+        for (var i = 0; i < gasstations.length; i++) {
+            var station = gasstations[i];
+            if (station.id == stationid) {
+                return station.name;
+            }
+        }
+        return "-";
+    }
+
+    function viewStation(stationid) {
+        _$("station_id").value = stationid;
+        setStationBaseData(stationid);
+        setStationCard(stationid);
+        setStationCover(stationid);
+        setStationHandset(stationid);
+        _$("shade_box").style.display = "block";
+        var stationBox = _$("station_box");
+        if ("" == stationBox.style.width) {
+            var stationTable = _$("station_table");
+            stationBox.style.width = (stationTable.offsetWidth + 2 * stationTable.offsetLeft) + "px";
+        }
+        stationBox.style.height = (_$("station_title").offsetHeight + _$("station_box_content").offsetHeight) + "px";
+    }
+
+    function setStationBaseData(stationid) {
+        if (gasstations == undefined || gasstations == null || gasstations.length == 0) {
+            _$("station_name").value = "-";
+            _$("station_lng").value = "-";
+            _$("station_lat").value = "-";
+            _$("station_radius").value = "-";
+            return;
+        }
+        for (var i = 0; i < gasstations.length; i++) {
+            var station = gasstations[i];
+            if (station.id == stationid) {
+                _$("station_name").value = station.name;
+                _$("station_lng").value = station.lon;
+                _$("station_lat").value = station.lat;
+                _$("station_radius").value = station.radius;
+                return;
+            }
+        }
+
+        _$("station_name").value = "-";
+        _$("station_lng").value = "-";
+        _$("station_lat").value = "-";
+        _$("station_radius").value = "-";
+    }
+
+    function setStationCard(stationid) {
+        if (commoncards == undefined || commoncards == null || commoncards.length == 0) {
+            _$("station_cover").innerHTML = "无";
+            return;
+        }
+        var cardHtml = "";
+        for (var i = 0; i < commoncards.length; i++) {
+            var card = commoncards[i];
+            if (card.gasstation_id == stationid) {
+                cardHtml += "," + card.commoncard_id;
+            }
+        }
+        if (cardHtml.length > 0) {
+            _$("station_card").innerHTML = cardHtml.slice(5);
+        } else {
+            _$("station_card").innerHTML = "无";
+        }
+    }
+
+    function setStationCover(stationid) {
+        if (gpss == undefined || gpss == null || gpss.length == 0) {
+            _$("station_cover").innerHTML = "";
+            return;
+        }
+        var coverHtml = "";
+        for (var i = 0; i < gpss.length; i++) {
+            var gps = gpss[i];
+            if (gps.gasstation_id == stationid) {
+                coverHtml += "、<br>(" + gps.lon + ", " + gps.lat + ")";
+            }
+        }
+        if (coverHtml.length > 0) {
+            _$("station_cover").innerHTML = coverHtml.slice(5);
+        } else {
+            _$("station_cover").innerHTML = "";
+        }
+    }
+
+    function setStationHandset(stationid) {
+        if (handles == undefined || handles == null || handles.length == 0) {
+            _$("station_handset").innerHTML = "";
+            return;
+        }
+        var handsetHtml = "";
+        for (var i = 0; i < handles.length; i++) {
+            var handset = handles[i];
+            if (handset.gasstation_id == stationid) {
+                handsetHtml += ",<br>" + handset.handle_id;
+            }
+        }
+        if (handsetHtml.length > 0) {
+            _$("station_handset").innerHTML = handsetHtml.slice(5);
+        } else {
+            _$("station_handset").innerHTML = "";
+        }
+    }
+
+    window.onload = function () {
+
+        bindEvent(_$("tbl_box"), "scroll", function (event) {
+            _$("tbl_head").style.transform = "translateY(" + event.target.scrollTop + "px)";
+        });
+
+        bindEvent(_$("station_box_close"), "click", function () {
+            _$("shade_box").style.display = "none";
+        });
+
+        ajaxGet("/action/distinfo_get", function (response) {
+            if (response.errno < 0) {
+                alert(response.errmsg);
+                return;
+            }
+            var distinfos = response.distinfos;
+            var len = distinfos.length;
+            // if (len < 1) {
+            //     alert("无配送信息！")
+            //     return;
+            // }s
+
+            gasstations = response.gasstations;
+            commoncards = response.commoncards;
+            gpss = response.gpss;
+            handles = response.handles;
+
+            var tbody_html = "";
+            for (var i = 0; i < len; i++) {
+                var distinfo = distinfos[i];
+                tbody_html += "<tr onclick='viewStation(" + distinfo.gasstation_id + ")'>" +
+                    "<td class='dist_id'>" + distinfo.dist_id + "</td>" +
+                    "<td class='barn_num'>" + distinfo.barn_num + "</td>" +
+                    "<td class='gasstation_id'>" + distinfo.gasstation_id + "</td>" +
+                    "<td class='gasstation_name'>" + getStationNameById(distinfo.gasstation_id) + "</td>" +
+                    "<td class='status'>" + parseDistStatus(distinfo.status) + "</td>" +
+                    "<td class='authtype'>" + parseAuthType(distinfo.authtype) + "</td>" +
+                    "<td class='authid'>" + distinfo.authid + "</td>" +
+                    "<td class='datetime'>" + formatDateTime(distinfo.datetime) + "</td></tr>";
+            }
+            _$("tbl_body").innerHTML = tbody_html;
+        });
+    }
+</script>

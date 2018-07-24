@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>移动网络参数</title>
+    <link rel="stylesheet" href="../css/base.css">
+</head>
+<body>
+<div class="container">
+    <div class="tbl-wrap">
+        <div class="item-box" id="tbl_box">
+            <table>
+                <tr>
+                    <td>APN</td>
+                    <td>
+                        <input type="text" class="item" id="apn" placeholder="最大长度63">
+                    </td>
+                </tr>
+                <tr>
+                    <td>拨号中心号码</td>
+                    <td>
+                        <input type="text" class="item" id="cent" placeholder="最大长度63">
+                    </td>
+                </tr>
+                <tr>
+                    <td>用户名</td>
+                    <td>
+                        <input type="text" class="item" id="username" placeholder="最大长度63">
+                    </td>
+                </tr>
+                <tr>
+                    <td>密码</td>
+                    <td>
+                        <input type="text" class="item" id="password" placeholder="最大长度63">
+                    </td>
+                </tr>
+                <tr>
+                    <td>短信中心</td>
+                    <td>
+                        <input type="text" class="item" id="smscent" placeholder="最大长度63">
+                    </td>
+                </tr>
+                <tr>
+                    <td>PPP认证类型</td>
+                    <td>
+                        <select class="item" id="pppauth">
+                            <option value="0">任意</option>
+                            <option value="1">PAP</option>
+                            <option value="2">CHAP</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>重拨次数</td>
+                    <td>
+                        <input type="number" min="0" max="255" step="1" class="item" id="redial" placeholder="">
+                    </td>
+                </tr>
+                <tr>
+                    <td>重置次数</td>
+                    <td>
+                        <input type="number" min="0" max="255" step="1" class="item" id="reset" placeholder="">
+                    </td>
+                </tr>
+                <tr>
+                    <td>本地IP</td>
+                    <td>
+                        <input type="text" class="item" id="localip" placeholder="最大长度63">
+                    </td>
+                </tr>
+                <tr>
+                    <td>远程IP</td>
+                    <td>
+                        <input type="text" class="item" id="remoteip" placeholder="最大长度63">
+                    </td>
+                </tr>
+            </table>
+
+            <input type="button" class="btn" id="submit" value="提交">
+        </div>
+    </div>
+</div>
+</body>
+</html>
+<script src="../js/base.js"></script>
+<script>
+    window.onload = function () {
+        var $apn = _$("apn");
+        var $cent = _$("cent");
+        var $username = _$("username");
+        var $password = _$("password");
+        var $smscent = _$("smscent");
+        var $pppauth = _$("pppauth");
+        var $redial = _$("redial");
+        var $reset = _$("reset");
+        var $localip = _$("localip");
+        var $remoteip = _$("remoteip");
+        ajaxGet("/action/param_mobile_get", function (response) {
+            if (response.errno < 0) {
+                alert(response.errmsg);
+                return;
+            }
+            var data = response.datas[0];
+            $apn.value = data.apn;
+            $cent.value = data.cent;
+            $username.value = data.username;
+            $password.value = data.password;
+            $smscent.value = data.smscent;
+            $pppauth.value = data.pppauth;
+            $redial.value = data.redial;
+            $reset.value = data.reset;
+            $localip.value = data.localip;
+            $remoteip.value = data.remoteip;
+        });
+
+        bindEvent(_$("submit"), "click", function () {
+            var apn = $apn.value;
+            var cent = $cent.value;
+            var username = $username.value;
+            var password = $password.value;
+            var smscent = $smscent.value;
+            var pppauth = $pppauth.value;
+            var redial = $redial.value;
+            var reset = $reset.value;
+            var localip = $localip.value;
+            var remoteip = $remoteip.value;
+            var data = "apn=" + apn + "&cent=" + cent + "&username=" + username + "&password=" + password +
+                "&smscent=" + smscent + "&pppauth=" + pppauth + "&redial=" + redial + "&reset=" + reset +
+                "&localip=" + localip + "&remoteip=" + remoteip;
+            ajaxPost("/action/param_mobile_set", data, function (response) {
+                if (response.errno < 0) {
+                    alert(response.errmsg);
+                    return;
+                }
+                alert("参数修改成功！");
+            });
+        });
+    }
+</script>

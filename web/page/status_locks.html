@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>锁状态</title>
+    <link rel="stylesheet" href="../css/base.css">
+    <style>
+        .lockid {
+            width: 260px;
+        }
+
+        .status {
+            width: 200px;
+        }
+
+        .alarm {
+            width: 240px;
+        }
+
+        .lowpower {
+            width: 500px;
+        }
+
+        .status {
+            width: 300px;
+        }
+
+        .emalarm {
+            width: 300px;
+        }
+
+        .opened {
+            width: 240px;
+        }
+
+        .commalarm {
+            width: 300px;
+        }
+
+        .lastrecvdatetime {
+            width: 300px;
+        }
+
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="tbl-wrap">
+        <div class="tbl-box" id="tbl_box">
+            <table>
+                <thead class="tbl-head" id="tbl_head">
+                <tr>
+                    <th class="lockid">锁编号</th>
+                    <th class="status">状态</th>
+                    <th class="alarm">异常报警</th>
+                    <th class="lowpower">低电报警</th>
+                    <th class="emalarm">应急报警</th>
+                    <th class="opened">通信报警</th>
+                    <th class="commalarm">打开状态</th>
+                    <th class="lastrecvdatetime">最后通信时间</th>
+                </tr>
+                </thead>
+                <tbody class="tbl-body" id="tbl_body"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+<script src="../js/base.js"></script>
+<script>
+    window.onload = function () {
+        bindEvent(_$("tbl_box"), "scroll", function (event) {
+            _$("tbl_head").style.transform = "translateY(" + event.target.scrollTop + "px)";
+        });
+
+        ajaxGet("/action/status_locks_get", function (response) {
+            if (response.errno < 0) {
+                alert(response.errmsg);
+                return;
+            }
+            var datas = response.datas;
+            var len = datas.length;
+            // if (len < 1) {
+            //     alert("无锁状态信息！")
+            // }
+
+            var tbody_html = "";
+            for (var i = 0; i < len; i++) {
+                var data = datas[i];
+                tbody_html += "<tr><td class='lockid'>" + data.lockid + "</td>" +
+                    "<td class='status'>" + parseLockSwitchStatus(data.status) + "</td>" +
+                    "<td class='alarm'>" + parseLockIsAlarm(data.alarm) + "</td>" +
+                    "<td class='lowpower'>" + parseLockIsAlarm(data.lowpower) + "</td>" +
+                    "<td class='emalarm'>" + parseLockIsAlarm(data.emalarm) + "</td>" +
+                    "<td class='commalarm'>" + parseLockIsAlarm(data.commalarm) + "</td>" +
+                    "<td class='opened'>" + parseLockOpenStatus(data.opened) + "</td>" +
+                    "<td class='lastrecvdatetime'>" + formatDateTime(data.lastrecvdatetime) + "</td></tr>";
+            }
+            _$("tbl_body").innerHTML = tbody_html;
+        })
+
+    }
+</script>

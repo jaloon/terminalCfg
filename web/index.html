@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>普利通电子签封安全监管系统</title>
+    <link rel="stylesheet" type="text/css" href="css/index.css">
+    <script src="js/index.js"></script>
+</head>
+<body onload="initBody()">
+
+<div class="header" id="header">
+    <div class="header01">
+        <div class="logo-zone">
+            <img src="img/commen-logo.png"/>
+        </div>
+    </div>
+    <div class="header02">
+        <span class="logo-text">普利通电子签封安全监管系统</span>
+    </div>
+</div>
+<div class="left" id="areaLeft">
+    <div class="left_top">
+        <div class="left_top_center">功能菜单</div>
+    </div>
+    <div class="left_center" id="menuInfo"></div>
+    <div class="left_center">
+        <div class="left_bottom_center">
+            <!--	<div class="left_bottom_center_left">安全退出</div>
+            <div class="left_bottom_center_right" onclick="resetSystem()">重启设备</div>-->
+            <div class="left_bottom_center_left" id="resetSystem" onclick="resetSystem() ">重启设备</div>
+        </div>
+    </div>
+</div>
+<div class="right" id="areaRight">
+    <div class="right_sepa" id="Separator" onclick="execSeparator() "></div>
+    <div class="right_top_area" id="rightTitle ">
+        <div class="right_top ">
+            <span id="parent_title">参数配置</span> &gt;
+            <span id="child_title" class="right_top_area_span">设备参数</span>
+        </div>
+    </div>
+
+    <div class="right_frame" id="rightFrame">
+        <iframe name="right_main" id="right_main" frameborder="no"
+                style="width:100%; height:100%; z-index:0" src="page/param_dev.html"
+                scrolling="auto" allowtransparency="true">
+        </iframe>
+    </div>
+</div>
+<div class="bottom_area" id="bottomArea">
+    <span class="bottom_area_span">Copyright © 2018 厦门普利通信息科技有限公司 版权所有 </span>
+</div>
+</body>
+</html>
