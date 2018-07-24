@@ -273,7 +273,7 @@ function initLogManageChild() {
         'url':'/messages'
     });
     arrDivInfo.push({
-        'id':'log',
+        'id':'log_clean',
         'name':'清空日志',
         'url':'/action/log_clean'
     });
@@ -349,7 +349,7 @@ function showMenu(strDivName)
 				if ($('node' + arrChild[iIndexChild].id))
 				{
 					$('node' + arrChild[iIndexChild].id).className = 'left_center_top_center_child_li';
-				//	$('node' + arrChild[iIndexChild].id).style.backgroundColor = '#FFF';
+				//	_$('node' + arrChild[iIndexChild].id).style.backgroundColor = '#FFF';
 				}
 			}
 		}
@@ -357,7 +357,7 @@ function showMenu(strDivName)
 	
 	if ($('node' + strDivName))
 	{
-	//	$('node' + strDivName).style.backgroundColor = '#BBDDFF';
+	//	_$('node' + strDivName).style.backgroundColor = '#BBDDFF';
 		$('node' + strDivName).className = 'left_center_top_center_child_li_check';
 	}
 	

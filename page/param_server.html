@@ -4,21 +4,6 @@
     <meta charset="UTF-8">
     <title>服务器参数</title>
     <link rel="stylesheet" href="../css/base.css">
-    <style>
-        #tbl_box tr td:first-child {
-            width: 160px;
-        }
-
-        #submit {
-            width: 100px;
-            height: 36px;
-            color: #ffffff;
-            border: 0;
-            position: relative;
-            left: 480px;
-            top: 30px;
-        }
-    </style>
 </head>
 <body>
 <div class="container">
@@ -39,13 +24,13 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>业务服务器RC4KEY</td>
+                    <td>业务服务器密钥</td>
                     <td>
                         <input type="text" class="item" id="business_svr_rc4key" placeholder="最大长度128" readonly>
                     </td>
                 </tr>
                 <tr>
-                    <td>业务服务器RC4Key版本</td>
+                    <td>业务服务器密钥版本</td>
                     <td>
                         <input type="number" min="0" max="255" step="1" class="item" id="business_svr_rc4key_ver"
                                placeholder="数值范围 0 ~ 255" readonly>
@@ -58,14 +43,14 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>通用服务器RC4Key版本</td>
+                    <td>通用服务器密钥版本</td>
                     <td>
                         <input type="number" min="0" max="255" step="1" class="item" id="common_svr_rc4key_ver"
                                placeholder="数值范围 0 ~ 255">
                     </td>
                 </tr>
                 <tr>
-                    <td>通用服务器RC4KEY</td>
+                    <td>通用服务器密钥</td>
                     <td>
                         <input type="text" class="item" id="common_svr_rc4key" placeholder="最大长度128">
                     </td>
@@ -146,66 +131,8 @@
 </div>
 </body>
 </html>
+<script src="../js/base.js"></script>
 <script>
-    function createXmlHttp() {
-        var xmlhttp;
-        if (window.XMLHttpRequest) {
-            // code for IE7+, Firefox, Chrome, Opera, Safari
-            xmlhttp = new XMLHttpRequest();
-        } else {
-            // code for IE6, IE5
-            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-        return xmlhttp;
-    }
-
-    function ajaxGet(url, successFn) {
-        var xmlhttp = createXmlHttp();
-        xmlhttp.onreadystatechange = function () {
-            if (xmlhttp.readyState == 4) { // 4 = "loaded"
-                if (xmlhttp.status == 200) { // 200 = "OK"
-                    var response = JSON.parse(xmlhttp.responseText);
-                    successFn(response);
-                } else {
-                    alert("http connection error: status[" + xmlhttp.status + "], " + xmlhttp.statusText);
-                }
-            }
-        }
-        xmlhttp.open("GET", url, true);
-        xmlhttp.send();
-    }
-
-    function ajaxPost(url, data, successFn) {
-        var xmlhttp = createXmlHttp();
-        xmlhttp.onreadystatechange = function () {
-            if (xmlhttp.readyState == 4) { // 4 = "loaded"
-                if (xmlhttp.status == 200) { // 200 = "OK"
-                    var response = JSON.parse(xmlhttp.responseText);
-                    successFn(response);
-                } else {
-                    alert("http connection error: status[" + xmlhttp.status + "], " + xmlhttp.statusText);
-                }
-            }
-        }
-        xmlhttp.open("POST", url, true);
-        xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xmlhttp.send(data);
-    }
-
-    function $(elementId) {
-        return document.getElementById(elementId);
-    }
-
-    function bindEvent(element, event, fn) {
-        if (element.addEventListener) {
-            // 现代浏览器
-            element.addEventListener(event, fn);
-        } else if (element.attchEvent) {
-            // IE8及更早版本和Opear 7.0及更早版本
-            element.attchEvent(event, fn);
-        }
-    }
-
     window.onload = function () {
         var $business_svr_ip = $("business_svr_ip");
         var $business_svr_port = $("business_svr_port");

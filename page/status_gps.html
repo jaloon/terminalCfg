@@ -34,54 +34,15 @@
 </div>
 </body>
 </html>
+<script src="../js/base.js"></script>
 <script>
-    function ajaxGet(url, successFn) {
-        var xmlhttp;
-        if (window.XMLHttpRequest) {
-            // code for IE7+, Firefox, Chrome, Opera, Safari
-            xmlhttp = new XMLHttpRequest();
-        } else {
-            // code for IE6, IE5
-            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-        xmlhttp.onreadystatechange = function () {
-            if (xmlhttp.readyState == 4) { // 4 = "loaded"
-                if (xmlhttp.status == 200) { // 200 = "OK"
-                    var response = JSON.parse(xmlhttp.responseText);
-                    successFn(response);
-                } else {
-                    alert("http connection error: status[" + xmlhttp.status + "], " + xmlhttp.statusText);
-                }
-            }
-        }
-        xmlhttp.open("GET", url, true);
-        xmlhttp.send();
-    }
-
-    function $(elementId) {
-        return document.getElementById(elementId);
-    }
-
-    function formatDateTime(second) {
-        var date = new Date(second * 1000);
-        var y = date.getFullYear();
-        var m = date.getMonth() + 1;
-        m = m < 10 ? ('0' + m) : m;
-        var d = date.getDate();
-        d = d < 10 ? ('0' + d) : d;
-        var h = date.getHours();
-        h = h < 10 ? ('0' + h) : h;
-        var minute = date.getMinutes();
-        minute = minute < 10 ? ('0' + minute) : minute;
-        var second = date.getSeconds();
-        second = second < 10 ? ('0' + second) : second;
-        return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second;
-    }
-
     window.onload = function () {
         ajaxGet("/action/status_gps_get", function (response) {
             if (response.errno < 0) {
                 alert(response.errmsg);
+                return;
+            }
+            if (response.datas.length < 1) {
                 return;
             }
             var data = response.datas[0];

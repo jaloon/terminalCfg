@@ -2,7 +2,7 @@
 /* CSS Document */
 
 body {
-    font-family: "宋体", Arial, Verdana, sans-serif, Helvetica;
+    font-family: "微软雅黑", Arial, Verdana, sans-serif, Helvetica;
     font-size: 12px;
     margin: 0;
     background-color: #FAFAFF; /*#f4f5eb; */
@@ -42,6 +42,7 @@ body, html {
 .header {
     width: 100%;
     height: 68px;
+    background-color: #478de4;
     /*background: url(../img/header_bei.gif);*/
 }
 
@@ -57,10 +58,30 @@ body, html {
 .header02 {
     float: left;
     height: 35px;
-    width: 130px;
+    width: 312px;
     margin-left: 5px;
     margin-top: 25px;
     /*background: url(../img/comp.png) no-repeat;*/
+}
+
+.logo-zone {
+    height: 22px;
+    width: 68px;
+    position: relative;
+    left: 20px;
+    top: 19px;
+}
+
+.logo-text {
+    height: 22px;
+    line-height: 22px;
+    color: #ffffff;
+    font-size: 24px;
+    font-weight: 500;
+    position: relative;
+    top: -3px;
+    left: 15px;
+    cursor: default;
 }
 
 /******************************* left ************************************/
@@ -69,7 +90,7 @@ body, html {
     width: 230px;
     height: auto;
     margin: 8px 0 8px 8px;
-
+    /*background-color: #445065;*/
     overflow: auto;
 }
 
@@ -86,7 +107,7 @@ body, html {
     font-weight: bold;
     padding: 10px 0 10px 70px;
     /*    text-shadow: 1px 1px #dceef7; */
-    width: 134px;
+    width: 160px;
     height: 18px;
 }
 
@@ -98,7 +119,7 @@ body, html {
 .left_center_top {
     background-color: #5599ff;
     border-bottom: 1px solid #8a9296;
-    width: 184px;
+    width: 210px;
     height: 17px;
     padding: 10px 0 10px 20px;
 
@@ -116,7 +137,7 @@ body, html {
 .left_center_top_act {
     background-color: #005FFF;
     border-bottom: 1px solid #8a9296;
-    width: 184px;
+    width: 210px;
     height: 17px;
     padding: 10px 0 10px 20px;
 
@@ -132,7 +153,7 @@ body, html {
     border-top: 0;
     background: #fff;
     font-size: 13px;
-    width: 202px;
+    width: 228px;
     display: none;
 }
 
@@ -197,7 +218,7 @@ body, html {
     border-bottom-right-radius: 5px;
     padding: 10px 20px 10px 20px;
     /*    text-shadow: 1px 1px #dceef7; */
-    width: 164px;
+    width: 190px;
     height: 18px;
 
     font-size: 14px;
@@ -232,7 +253,6 @@ body, html {
     top: 68px;
     left: 240px;
     right: 0px;
-
 }
 
 .right_sepa {
@@ -286,13 +306,15 @@ body, html {
     height: 16px;
     width: 100%;
     /*background-image: url(../img/bottom.gif);*/
+    background-color: #478de4;
     text-align: center;
     padding-top: 4px;
 }
 
 .bottom_area_span {
     margin-top: 3px;
-    color: #D0D0D0;
+    /*color: #D0D0D0;*/
+    color: #ffffff;
     font-weight: 500;
     font-size: 12px;
 }

@@ -288,7 +288,7 @@ select.param {
 }
 
 .item-box tr td:first-child {
-    width: 80px;
+    width: 160px;
 }
 
 .btn {
@@ -306,6 +306,16 @@ select.param {
 .btn:disabled {
     background: #c4ccd2;
     cursor: default;
+}
+
+#submit {
+    width: 100px;
+    height: 36px;
+    color: #ffffff;
+    border: 0;
+    position: relative;
+    left: 460px;
+    top: 30px;
 }
 
 input[readonly] {

@@ -47,78 +47,8 @@
 </div>
 </body>
 </html>
+<script src="../js/base.js"></script>
 <script>
-    /**
-     * 根据元素ID获取页面元素
-     * @param {string} elementId 元素ID
-     * @returns {HTMLElement | null} 页面元素
-     */
-    function $(elementId) {
-        return document.getElementById(elementId);
-    }
-
-    /**
-     * 为页面元素绑定事件
-     * @param {HTMLElement} element 页面元素
-     * @param {string} event 事件名称
-     * @param {function} fn 事件处理函数
-     */
-    function bindEvent(element, event, fn) {
-        if (element.addEventListener) {
-            // 现代浏览器
-            element.addEventListener(event, fn);
-        } else if (element.attchEvent) {
-            // IE8及更早版本和Opear 7.0及更早版本
-            element.attchEvent(event, fn);
-        }
-    }
-
-    /**
-     * ajax get 请求
-     * @param {string} url 请求路径
-     * @param {function} successFn 请求成功的回调函数
-     */
-    function ajaxGet(url, successFn) {
-        var xmlhttp;
-        if (window.XMLHttpRequest) {
-            // code for IE7+, Firefox, Chrome, Opera, Safari
-            xmlhttp = new XMLHttpRequest();
-        } else {
-            // code for IE6, IE5
-            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-        xmlhttp.onreadystatechange = function () {
-            if (xmlhttp.readyState == 4) { // 4 = "loaded"
-                if (xmlhttp.status == 200) { // 200 = "OK"
-                    var response = JSON.parse(xmlhttp.responseText);
-                    successFn(response);
-                } else {
-                    alert("http connection error: status[" + xmlhttp.status + "], " + xmlhttp.statusText);
-                }
-            }
-        }
-        xmlhttp.open("GET", url, true);
-        xmlhttp.send();
-    }
-
-    /**
-     * 卡类型
-     * @param {number} type 卡类型值
-     * @returns {string} 卡类型
-     */
-    function parseType(type) {
-        switch (type) {
-            case 2:
-                return "入库卡";
-            case 3:
-                return "出库卡";
-            case 4:
-                return "出入库卡";
-            default:
-                return "未知";
-        }
-    }
-
     window.onload = function () {
         bindEvent($("tbl_box"), "scroll", function (event) {
             $("tbl_head").style.transform = "translateY(" + event.target.scrollTop + "px)";
@@ -131,9 +61,9 @@
             }
             var datas = response.datas;
             var len = datas.length;
-            if (len < 1) {
-                alert("无出入库卡信息！")
-            }
+            // if (len < 1) {
+            //     alert("无出入库卡信息！")
+            // }
 
             var tbody_html = "";
             for (var i = 0; i < len; i++) {
