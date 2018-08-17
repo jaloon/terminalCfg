@@ -24,6 +24,16 @@ function bindEvent(element, event, fn) {
 }
 
 /**
+ * IP校验
+ * @param {string} ip IP地址
+ * @returns {boolean} 是否符合IP格式
+ */
+function isIP(ip) {
+    var reg = /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/;
+    return reg.test(ip);
+}
+
+/**
  * 时间秒数格式化为日期时间字符串形式
  * @param {number} second 时间秒数
  * @returns {string} 日期时间字符串
@@ -124,7 +134,7 @@ function funcEnable(enable) {
 function parseLockType(type) {
     if (type == 1) {
         return "上仓锁";
-    } else if (type == 2) {
+    } else if (type == 0) {
         return "下仓锁";
     } else {
         return "未知(" + type + ")";
@@ -499,9 +509,9 @@ function parseDistStatus(status) {
 }
 
 /**
- * 配送状态
- * @param {number} status 配送状态值
- * @returns {string} 配送状态
+ * 字符串null处理
+ * @param {number} value 字符串值
+ * @returns {string} 处理后的字符串
  */
 function isNullByStr(value) {
     if (value == undefined || value == null) {

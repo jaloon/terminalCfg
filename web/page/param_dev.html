@@ -12,6 +12,12 @@
         <div class="item-box" id="tbl_box">
             <table>
                 <tr>
+                    <td>编号</td>
+                    <td>
+                        <input type="number" min="16777216" max="33554431" class="item" id="dev_id" placeholder="0x01000000~0x01FFFFFF">
+                    </td>
+                </tr>
+                <tr>
                     <td>车牌号</td>
                     <td>
                         <input type="text" class="item" id="carno" readonly>
@@ -110,6 +116,7 @@
 <script src="../js/base.js"></script>
 <script>
     window.onload = function () {
+        var $dev_id = _$("dev_id");
         var $carno = _$("carno");
         var $dist_card = _$("dist_card");
         var $sim_card = _$("sim_card");
@@ -129,6 +136,7 @@
                 return;
             }
             var data = response.datas[0];
+            $dev_id.value = data.id;
             $carno.value = data.carno;
             $dist_card.value = data.dist_card;
             $sim_card.value = data.sim_card;
@@ -145,10 +153,11 @@
         });
 
         bindEvent(_$("submit"), "click", function () {
+            var dev_id = $dev_id.value;
             var sim_card = $sim_card.value;
             var logtype = $logtype.value;
             var loglevel = $loglevel.value;
-            var data = "sim_card=" + sim_card + "&logtype=" + logtype + "&loglevel=" + loglevel;
+            var data = "id=" + dev_id + "&sim_card=" + sim_card + "&logtype=" + logtype + "&loglevel=" + loglevel;
             ajaxPost("/action/param_dev_set", data, function (response) {
                     if (response.errno < 0) {
                         alert(response.errmsg);

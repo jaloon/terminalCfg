@@ -74,6 +74,18 @@
                         <input type="text" class="item" id="remoteip" placeholder="最大长度63">
                     </td>
                 </tr>
+                <tr>
+                    <td>DNS1</td>
+                    <td>
+                        <input type="text" class="item" id="dns1" placeholder="最大长度63">
+                    </td>
+                </tr>
+                <tr>
+                    <td>DNS2</td>
+                    <td>
+                        <input type="text" class="item" id="dns2" placeholder="最大长度63">
+                    </td>
+                </tr>
             </table>
 
             <input type="button" class="btn" id="submit" value="提交">
@@ -95,6 +107,8 @@
         var $reset = _$("reset");
         var $localip = _$("localip");
         var $remoteip = _$("remoteip");
+        var $dns1 = _$("dns1");
+        var $dns2 = _$("dns2");
         ajaxGet("/action/param_mobile_get", function (response) {
             if (response.errno < 0) {
                 alert(response.errmsg);
@@ -111,6 +125,8 @@
             $reset.value = data.reset;
             $localip.value = data.localip;
             $remoteip.value = data.remoteip;
+            $dns1.value = data.dns1;
+            $dns2.value = data.dns2;
         });
 
         bindEvent(_$("submit"), "click", function () {
@@ -124,9 +140,28 @@
             var reset = $reset.value;
             var localip = $localip.value;
             var remoteip = $remoteip.value;
+            var dns1 = $dns1.value;
+            var dns2 = $dns2.value;
+            if (localip.length > 0 && !isIP(localip)) {
+                alert("本地IP不符合IP格式！");
+                return;
+            }
+            if (remoteip.length > 0 && !isIP(remoteip)) {
+                alert("远程IP不符合IP格式！");
+                return;
+            }
+            if (dns1.length > 0 && !isIP(dns1)) {
+                alert("DNS1不符合IP格式！");
+                return;
+            }
+            if (dns2.length > 0 && !isIP(dns2)) {
+                alert("DNS2不符合IP格式！");
+                return;
+            }
+
             var data = "apn=" + apn + "&cent=" + cent + "&username=" + username + "&password=" + password +
                 "&smscent=" + smscent + "&pppauth=" + pppauth + "&redial=" + redial + "&reset=" + reset +
-                "&localip=" + localip + "&remoteip=" + remoteip;
+                "&localip=" + localip + "&remoteip=" + remoteip + "&dns1=" + dns1 + "&dns2=" + dns2;
             ajaxPost("/action/param_mobile_set", data, function (response) {
                 if (response.errno < 0) {
                     alert(response.errmsg);

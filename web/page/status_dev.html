@@ -52,6 +52,12 @@
                         <input type="text" class="item" id="allow_lock" readonly>
                     </td>
                 </tr>
+				<tr>
+                    <td>出库时间</td>
+                    <td>
+                        <input type="text" class="item" id="out_oildepot_time" readonly>
+                    </td>
+                </tr>
             </table>
         </div>
     </div>
@@ -74,6 +80,7 @@
             _$("station_id").value = data.station_id;
 			_$("inout_reader_id").value = data.reader_dev_id;
 			_$("allow_lock").value = data.allow_lock;
+			_$("out_oildepot_time").value = formatDateTime(data.out_oildepot_time);
         });
     }
 </script>
