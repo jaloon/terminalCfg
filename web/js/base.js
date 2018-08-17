@@ -134,7 +134,7 @@ function funcEnable(enable) {
 function parseLockType(type) {
     if (type == 1) {
         return "上仓锁";
-    } else if (type == 0) {
+    } else if (type == 2) {
         return "下仓锁";
     } else {
         return "未知(" + type + ")";
