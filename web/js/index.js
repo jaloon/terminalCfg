@@ -212,6 +212,11 @@ function initRecordChild() {
         'name':'锁状态变更记录',
         'url':'page/record_lockstatus.html'
     });
+    arrDivInfo.push({
+        'id':'record_event',
+        'name':'车台事件记录',
+        'url':'page/record_event.html'
+    });
 
     return arrDivInfo;
 }
@@ -481,18 +486,14 @@ function resetSystem()
 		return;
 	}
 
-	var ajaxHtml = new ajax();
-	ajaxHtml.request({
-		type:'get',
-		url:'/sysreboot',
-		success:function(strData)
-		{
-			var boxProgress = new Box('ResetProgress');
-			boxProgress.showAutoProgress('请等待重启！', true, true, 20,
-				function(){
-					location.reload(true);
-				});
-		}
-	});
-
+    ajaxPost("/action/reboot", function (response)
+    {
+        if (response.errno < 0)
+        {
+            alert(response.errmsg);
+            return;
+        }
+        alert("设备重启成功！");
+        location.reload(true);
+    });
 }

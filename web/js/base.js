@@ -460,7 +460,7 @@ function parseUploadChannel(uploadtype) {
  * @param {number} type 卡类型值
  * @returns {string} 卡类型
  */
-function parseType(type) {
+function parseCardType(type) {
     switch (type) {
         case 2:
             return "入库卡";
@@ -489,6 +489,18 @@ function parseReaderType(type) {
         default:
             return "未知(" + type + ")";
     }
+}
+
+/**
+ * 车台事件
+ * @param {number} type 事件类型值
+ * @returns {string} 事件类型
+ */
+function parseEventType(type) {
+    if (type == 1) {
+        return "车台断电";
+    }
+    return "未知(" + type + ")";
 }
 
 /**

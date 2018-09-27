@@ -75,7 +75,7 @@
             var data = response.datas[0];
             _$("status").value = parseDevStatus(data.status);
             _$("statusbf").value = parseDevStatus(data.statusbf);
-            _$("diststatus").value = data.diststatus == 0 ? "未同步" : data.diststatus == 0 ? "已同步" : "未知(" + data.diststatus + ")";
+            _$("diststatus").value = data.diststatus == 0 ? "未同步" : data.diststatus == 1 ? "已同步" : "未知(" + data.diststatus + ")";
             _$("dev_alarm_outrange").value = data.dev_alarm_outrange == 0 ? "否" : data.dev_alarm_outrange == 1 ? "是" : "未知(" + data.dev_alarm_outrange + ")";
             _$("station_id").value = data.station_id;
 			_$("inout_reader_id").value = data.reader_dev_id;
